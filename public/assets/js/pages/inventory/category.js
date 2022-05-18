@@ -27,11 +27,12 @@ Categories.forEach(function(raw) {
                         <input class="form-check-input" type="checkbox" name="chk_child" value="${raw.id}">
                     </div>
                 </th>
-                <td class="id"><a href="javascript:void(0);" onclick="ViewCategory(this);" data-id="` + raw.id + `" class="fw-medium link-primary">` + raw.name + `</a></td>
-                <td class="customer_name">`+raw.unit+`</td>
-                <td class="customer_name">`+raw.tax_preference+`</td>
-                <td class="customer_name">`+raw.hsn_code+`</td>
-                <td class="customer_name">`+raw.tax_rate+`</td>
+                <td class="name hidden"><a href="javascript:void(0);" data-id="` + raw.id + `" class="fw-medium link-primary">` + raw.id + `</a></td>
+                <td class="name">` + raw.name + `</td>
+                <td class="unit">`+raw.unit+`</td>
+                <td class="tax_preference">`+raw.tax_preference+`</td>
+                <td class="hsn_code">`+raw.hsn_code+`</td>
+                <td class="tax_rate">`+raw.tax_rate+`</td>
                 <td class="status"><span class="badge badge-soft-` + badge + ` text-uppercase">` + raw.status + `</span>
                 </td>
                 <td>
@@ -44,7 +45,7 @@ Categories.forEach(function(raw) {
                                     Edit</button></li>
                             <li class="dropdown-divider"></li>
                             <li>
-                                <a class="dropdown-item remove-item-btn" data-bs-toggle="modal" href="#deleteCategory">
+                                <a class="dropdown-item remove-item-btn" data-bs-toggle="modal"  href="javascript:void(0);" onclick="DeleteCategory(this)" data-id="`+raw.id+`">
                                     <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
                                     Delete
                                 </a>
@@ -87,7 +88,7 @@ if (checkAll) {
     };
 }
 
-
+const perPage = 10;
 //Table
 var options = {
     valueNames: [
@@ -277,7 +278,7 @@ function refreshCallbacks() {
             });
         });
     });
-// }
+}
 
 document.querySelector("#CategoryList").addEventListener("click", function() {
     // refreshCallbacks();
@@ -311,39 +312,130 @@ document.querySelector("#CategoryList").addEventListener("click", function() {
 //     window.location.assign("apps-invoices-details")
 // }
 
-// function EditCateogry(data) {
-//     var id = data.getAttribute('data-id');
-//     localStorage.setItem("invoices-list", JSON.stringify(Invoices));
-//     localStorage.setItem("option", "edit-invoice");
-//     localStorage.setItem("id", id);
-//     window.location.assign("apps-invoices-create")
-// }
+function DeleteCategory(data, multi = false) {
+    const ids = multi?data:[data.getAttribute('data-id')];
+    if (confirm('Are you sure you want to delete this?')) {
+      $.ajax({
+        type: "post",
+        url: api.url + "inventory/delete-category",
+        data: {ids:ids},
+        headers: {
+            Authorization: localStorage.getItem("token"),
+        },
+        success: function(response) {
+          if (response.success) {
+            if (response.success) {
+              Swal.fire({
+                title: 'Success!',
+                text: response.message,
+                icon: 'success',
+                confirmButtonText: 'O K'
+              })
 
-// // Delete Multiple Records
-// function deleteMultiple() {
-//     ids_array = [];
-//     var items = document.getElementsByName('chk_child');
-//     items.forEach(function(ele) {
-//         if (ele.checked == true) {
-//             ids_array.push(ele.value);
-//         }
-//     });
+              ids.forEach(function(id) {
+                // <td class="id"><a href="javascript:void(0);" data-id="` + raw.id + `" class="fw-medium link-primary">` + raw.name + `</a></td>
+                  // CategoryList.remove("id", `<a href="javascript:void(0);" onclick="ViewCategory(this);" data-id="` + id.slice(3) + `" class="fw-medium link-primary">${id}</a>`);
+              });
+            }
+          }
+        },
+        error: function(error) {
+            // error.status == 0 && (window.location.href = "/login");
+            // error.status == 404 && (window.location.href = "/auth-404-basic");
+        }
+      })
+    } else {
+      return false;
+    }
+}
+function EditCateogry(data) {
+    const id = data.getAttribute('data-id');
+    const editData = Categories.filter((obj)=>obj.id===id);
+    console.log(editData)
+    $('#new-category-name').val(editData[0].name);
+    $('#new-category-unit').val(editData[0].unit);
+    $('#new-category-tax_preference').val(editData[0].tax_preference);
+    $('#new-category-hsn_code').val(editData[0].hsn_code);
+    $('#new-category-tax_rate').val(editData[0].tax_rate);
+    $('#new-category-status').val(editData[0].status);
+    $('#new-category-id').val(id);
+    $('#add-category-modal').modal('toggle');
+}
 
-//     if (typeof ids_array !== 'undefined' && ids_array.length > 0) {
-//         if (confirm('Are you sure you want to delete this?')) {
-//             ids_array.forEach(function(id) {
-//                 CategoryList.remove("id", `<a href="javascript:void(0);" onclick="ViewCategory(this);" data-id="` + id.slice(3) + `" class="fw-medium link-primary">${id}</a>`);
-//             });
-//             document.getElementById('checkAll').checked = false;
-//         } else {
-//             return false;
-//         }
-//     } else {
-//         Swal.fire({
-//             title: 'Please select at least one checkbox',
-//             confirmButtonClass: 'btn btn-info',
-//             buttonsStyling: false,
-//             showCloseButton: true
-//         });
-//     }
-// }
+function newCategory() {
+  $('#new-category-name').val('');
+  $('#new-category-unit').val('');
+  $('#new-category-hsn_code').val('');
+  $('#new-category-tax_rate').val('');
+  $('#new-category-id').val('new');
+  $('#add-category-modal').modal('toggle')
+}
+$('#new-category-save').click(function() {
+  if ($('#new-category-name').val() !== '') {
+    $.ajax({
+          type: "post",
+          url: api.url + "inventory/new-category",
+          data: {
+            name: $('#new-category-name').val(),
+            unit: $('#new-category-unit').val(),
+            tax_preference: $('#new-category-tax_preference').val(),
+            hsn_code: $('#new-category-hsn_code').val(),
+            tax_rate: $('#new-category-tax_rate').val(),
+            status: $('#new-category-status').val(),
+            id: $('#new-category-id').val(),
+          },
+          headers: {
+              Authorization: localStorage.getItem("token"),
+          },
+          success: function(response) {
+            if (response.success) {
+              if (response.success) {
+            Swal.fire({
+              title: 'Success!',
+              text: response.message,
+              icon: 'success',
+              confirmButtonText: 'O K'
+            })
+              }
+            }
+        $('#add-model-modal').modal('hide')
+
+          },
+          error: function(error) {
+              error.status == 0 && (window.location.href = "/login");
+              error.status == 404 && (window.location.href = "/auth-404-basic");
+          }
+    })
+  }
+})
+// Delete Multiple Records
+function deleteMultiple() {
+    ids_array = [];
+    var items = document.getElementsByName('chk_child');
+    items.forEach(function(ele) {
+        if (ele.checked == true) {
+            ids_array.push(ele.value);
+        }
+    });
+
+    if (typeof ids_array !== 'undefined' && ids_array.length > 0) {
+        if (confirm('Are you sure you want to delete this?')) {
+            DeleteCategory(ids_array, true);
+            ids_array.forEach(function(id) {
+              // <td class="id"><a href="javascript:void(0);" data-id="` + raw.id + `" class="fw-medium link-primary">` + raw.name + `</a></td>
+                CategoryList.remove("id", `<a href="javascript:void(0);" data-id="` + id + `" class="fw-medium link-primary">` + id + `</a>`);
+            });
+
+            document.getElementById('checkAll').checked = false;
+        } else {
+            return false;
+        }
+    } else {
+        Swal.fire({
+            title: 'Please select at least one checkbox',
+            confirmButtonClass: 'btn btn-info',
+            buttonsStyling: false,
+            showCloseButton: true
+        });
+    }
+}

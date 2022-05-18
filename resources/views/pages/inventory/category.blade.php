@@ -15,7 +15,7 @@
                         <h5 class="card-title mb-0 flex-grow-1">Category</h5>
                         <div class="flex-shrink-0">
                             <button class="btn btn-primary" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
-                            <a href="#" class="btn btn-soft-primary"><i class="ri-add-line align-bottom me-1" id="create-category-popup"></i> Create Category</a>
+                            <a href="#" class="btn btn-soft-primary" onclick="newCategory()"><i class="ri-add-line align-bottom me-1"></i> Create Category</a>
                         </div>
                     </div>
                 </div>
@@ -137,6 +137,72 @@
 
         </div><!--end col-->
     </div><!--end row-->
+<!-- Add New CATEGORY -->
+<div class="modal fade" id="add-category-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0">
+            <div class="modal-header p-3 bg-soft-info">
+                <h5 class="modal-title" id="modal-title">Add Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row event-form">
+                    <input type="text" name="id" id="new-category-id" style="display: none;">
+                    <div class="col-12"> 
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input class="form-control" placeholder="Enter category name" type="text" name="title" id="new-category-name" required value="" />
+                            <div class="invalid-feedback">Please provide a valid category name</div>
+                        </div>
+                    </div><!--end col-->
+                    <div class="col-12"> 
+                        <div class="mb-3">
+                            <label class="form-label">Unit</label>
+                            <input class="form-control" placeholder="Enter category name" type="text" name="title" id="new-category-unit" required value="" />
+                            <div class="invalid-feedback">Please provide a valid category unit</div>
+                        </div>
+                    </div><!--end col-->
+                    <div class="col-12"> 
+                        <div class="mb-3">
+                            <label class="form-label">Tax Preference</label>
+                            <select class="form-control" data-choices data-choices-search-false name="choices-single-default"  id="search-status">
+                                <option value="Taxable" selected>Taxable</option>
+                                <option value="Non-Taxable">Non-Taxable</option>
+                            </select>
+                        </div>
+                    </div><!--end col-->
+                    <div class="col-12"> 
+                        <div class="mb-3">
+                            <label class="form-label">HSN code</label>
+                            <input class="form-control" placeholder="Enter category name" type="number" name="title" id="new-category-hsn_code" required value="" />
+                            <div class="invalid-feedback">Please provide a valid HSN code</div>
+                        </div>
+                    </div><!--end col-->
+                    <div class="col-12"> 
+                        <div class="mb-3">
+                            <label class="form-label">Tax Rate</label>
+                            <input class="form-control" placeholder="Enter category name" type="number" name="title" id="new-category-tax_rate" required value="" />
+                            <div class="invalid-feedback">Please provide a valid tax rate</div>
+                        </div>
+                    </div><!--end col-->
+                    <div class="col-12"> 
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-control" data-choices data-choices-search-false name="choices-single-default"  id="search-status">
+                                <option value="active" selected>Active</option>
+                                <option value="non-active">Non-Active</option>
+                            </select>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
+                <div class="hstack gap-2 justify-content-end">
+                    <button type="button" class="btn btn-soft-danger" id="btn-delete-event"><i class="ri-close-line align-bottom"></i> Delete</button>
+                    <button class="btn btn-success" id="new-category-save">Add Category</button>
+                </div>
+            </div>
+        </div> <!-- end modal-content-->
+    </div> <!-- end modal dialog-->
+</div> <!-- end modal--><!-- Add New MODEL -->
 @endsection
 @section('script')
     <script src="{{ URL::asset('assets/libs/list.js/list.js.min.js') }}"></script>
