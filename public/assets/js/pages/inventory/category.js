@@ -1,62 +1,77 @@
 
 var Categories = [{
-    id: '111',
+    id: 5,
     name: 'test1',
     unit: '123',
-    tax_preference: '3333',
+    tax_preference: '1',
     hsn_code: "1232",
     tax_rate: 123,
-    status: 'active',
+    status: '0',
 }];
+$.ajax({
+    type: "post",
+    url: api.url + "inventory/get_category",
+    success: function(response) {
+        const data = response.data;
+        console.log(data)
+        if (response.success) {
+           Categories = response.data;
+            Categories.forEach(function(raw) {
+                console.log(raw)
+                let badge;
+                switch (raw.status) {
+                    case '1':
+                        badge = "success";
+                        break;
+                    case '0':
+                        badge = "warning";
+                }
 
+                var tableRawData = `<tr>
+                            <th scope="row">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="chk_child" value="${raw.id}">
+                                </div>
+                            </th>
+                            <td class="hidden"  style="display: none;"><a href="javascript:void(0);" data-id="` + raw.id + `" class="fw-medium link-primary">` + raw.id + `</a></td>
+                            <td class="name">` + raw.name + `</td>
+                            <td class="unit">`+raw.unit+`</td>
+                            <td class="tax_preference">`+(raw.tax_preference?'Taxable':'None-Taxable')+`</td>
+                            <td class="hsn_code">`+raw.hsn_code+`</td>
+                            <td class="tax_rate">`+raw.tax_rate+`</td>
+                            <td class="status"><span class="badge badge-soft-` + badge + ` text-uppercase">` + (raw.status?'Active':'Non Active') + `</span>
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="ri-more-fill align-middle"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><button class="dropdown-item" href="javascript:void(0);" onclick="EditCateogry(this);" data-id="` + raw.id + `"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
+                                                Edit</button></li>
+                                        <li class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item remove-item-btn" data-bs-toggle="modal"  href="javascript:void(0);" onclick="DeleteCategory(this)" data-id="`+raw.id+`">
+                                                <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                Delete
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>`;
+
+                document.getElementById('category-list-data').innerHTML += tableRawData;
+            });
+        }
+
+    },
+    error: function(error) {
+        
+    }
+})
 
 //ist form-check-all
-Categories.forEach(function(raw) {
-    let badge;
-    switch (raw.status) {
-        case 'active':
-            badge = "success";
-            break;
-        case 'non-active':
-            badge = "warning";
-    }
-
-    var tableRawData = `<tr>
-                <th scope="row">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="chk_child" value="${raw.id}">
-                    </div>
-                </th>
-                <td class="name hidden"><a href="javascript:void(0);" data-id="` + raw.id + `" class="fw-medium link-primary">` + raw.id + `</a></td>
-                <td class="name">` + raw.name + `</td>
-                <td class="unit">`+raw.unit+`</td>
-                <td class="tax_preference">`+raw.tax_preference+`</td>
-                <td class="hsn_code">`+raw.hsn_code+`</td>
-                <td class="tax_rate">`+raw.tax_rate+`</td>
-                <td class="status"><span class="badge badge-soft-` + badge + ` text-uppercase">` + raw.status + `</span>
-                </td>
-                <td>
-                    <div class="dropdown">
-                        <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="ri-more-fill align-middle"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><button class="dropdown-item" href="javascript:void(0);" onclick="EditCateogry(this);" data-id="` + raw.id + `"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                    Edit</button></li>
-                            <li class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item remove-item-btn" data-bs-toggle="modal"  href="javascript:void(0);" onclick="DeleteCategory(this)" data-id="`+raw.id+`">
-                                    <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                    Delete
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>`;
-
-    document.getElementById('category-list-data').innerHTML += tableRawData;
-});
 
 document.addEventListener("DOMContentLoaded", function() {
     var genericExamples = document.querySelectorAll('[data-plugin="choices"]');
@@ -350,7 +365,7 @@ function DeleteCategory(data, multi = false) {
 }
 function EditCateogry(data) {
     const id = data.getAttribute('data-id');
-    const editData = Categories.filter((obj)=>obj.id===id);
+    const editData = Categories.filter((obj)=>obj.id==id);
     console.log(editData)
     $('#new-category-name').val(editData[0].name);
     $('#new-category-unit').val(editData[0].unit);
@@ -371,7 +386,6 @@ function newCategory() {
   $('#add-category-modal').modal('toggle')
 }
 $('#new-category-save').click(function() {
-  if ($('#new-category-name').val() !== '') {
     $.ajax({
           type: "post",
           url: api.url + "inventory/new-category",
@@ -406,7 +420,6 @@ $('#new-category-save').click(function() {
               error.status == 404 && (window.location.href = "/auth-404-basic");
           }
     })
-  }
 })
 // Delete Multiple Records
 function deleteMultiple() {

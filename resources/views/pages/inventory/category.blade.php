@@ -165,9 +165,9 @@
                     <div class="col-12"> 
                         <div class="mb-3">
                             <label class="form-label">Tax Preference</label>
-                            <select class="form-control" data-choices data-choices-search-false name="choices-single-default"  id="search-status">
-                                <option value="Taxable" selected>Taxable</option>
-                                <option value="Non-Taxable">Non-Taxable</option>
+                            <select class="form-control" name="choices-single-default" id="new-category-tax_preference">
+                                <option value="1" selected>Taxable</option>
+                                <option value="0">Non-Taxable</option>
                             </select>
                         </div>
                     </div><!--end col-->
@@ -188,9 +188,9 @@
                     <div class="col-12"> 
                         <div class="mb-3">
                             <label class="form-label">Status</label>
-                            <select class="form-control" data-choices data-choices-search-false name="choices-single-default"  id="search-status">
-                                <option value="active" selected>Active</option>
-                                <option value="non-active">Non-Active</option>
+                            <select class="form-control" name="choices-single-default" id="new-category-status">
+                                <option value="1" selected>Active</option>
+                                <option value="0">Non-Active</option>
                             </select>
                         </div>
                     </div><!--end col-->
