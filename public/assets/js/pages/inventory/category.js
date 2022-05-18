@@ -69,25 +69,24 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
-// var checkAll = document.getElementById("checkAll");
-// if (checkAll) {
-//     checkAll.onclick = function() {
-//         var checkboxes = document.querySelectorAll('.form-check-all input[type="checkbox"]');
-//         if (checkAll.checked == true) {
-//             checkboxes.forEach(function(checkbox) {
-//                 checkbox.checked = true;
-//                 checkbox.closest("tr").classList.add("table-active");
-//             });
-//         } else {
-//             checkboxes.forEach(function(checkbox) {
-//                 checkbox.checked = false;
-//                 checkbox.closest("tr").classList.remove("table-active");
-//             });
-//         }
-//     };
-// }
+var checkAll = document.getElementById("checkAll");
+if (checkAll) {
+    checkAll.onclick = function() {
+        var checkboxes = document.querySelectorAll('.form-check-all input[type="checkbox"]');
+        if (checkAll.checked == true) {
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = true;
+                checkbox.closest("tr").classList.add("table-active");
+            });
+        } else {
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = false;
+                checkbox.closest("tr").classList.remove("table-active");
+            });
+        }
+    };
+}
 
-var perPage = 10;
 
 //Table
 var options = {
@@ -99,7 +98,7 @@ var options = {
         "tax_rate",
         "status",
     ],
-    page: perPage,
+    page: 10,
     pagination: true,
     plugins: [
         ListPagination({
@@ -152,17 +151,17 @@ var CategoryList = new List("CategoryList", options).on(
 
 // var isValue = isCount.body.firstElementChild.innerHTML;
 
-// var idField = document.getElementById("orderId"),
-//     customerNameField = document.getElementById("customername-field"),
-//     emailField = document.getElementById("email-field"),
-//     dateField = document.getElementById("date-field"),
-//     countryField = document.getElementById("country-field"),
-//     statusField = document.getElementById("delivered-status"),
-//     addBtn = document.getElementById("add-btn"),
-//     editBtn = document.getElementById("edit-btn"),
-//     removeBtns = document.getElementsByClassName("remove-item-btn"),
-//     editBtns = document.getElementsByClassName("edit-item-btn");
-// refreshCallbacks();
+var idField = document.getElementById("orderId"),
+    customerNameField = document.getElementById("customername-field"),
+    emailField = document.getElementById("email-field"),
+    dateField = document.getElementById("date-field"),
+    countryField = document.getElementById("country-field"),
+    statusField = document.getElementById("delivered-status"),
+    addBtn = document.getElementById("add-btn"),
+    editBtn = document.getElementById("edit-btn"),
+    removeBtns = document.getElementsByClassName("remove-item-btn"),
+    editBtns = document.getElementsByClassName("edit-item-btn");
+refreshCallbacks();
 // filterContact("All");
 
 // function filterContact(isValue) {
@@ -243,47 +242,47 @@ var CategoryList = new List("CategoryList", options).on(
 //     CategoryList.update();
 // }
 
-// function ischeckboxcheck() {
-//     document.getElementsByName("checkAll").forEach(function(x) {
-//         x.addEventListener("click", function(e) {
-//             if (e.target.checked) {
-//                 e.target.closest("tr").classList.add("table-active");
-//             } else {
-//                 e.target.closest("tr").classList.remove("table-active");
-//             }
-//         });
-//     });
+function ischeckboxcheck() {
+    document.getElementsByName("checkAll").forEach(function(x) {
+        x.addEventListener("click", function(e) {
+            if (e.target.checked) {
+                e.target.closest("tr").classList.add("table-active");
+            } else {
+                e.target.closest("tr").classList.remove("table-active");
+            }
+        });
+    });
+}
+
+function refreshCallbacks() {
+    removeBtns.forEach(function(btn) {
+        btn.addEventListener("click", function(e) {
+            e.target.closest("tr").children[1].innerText;
+            itemId = e.target.closest("tr").children[1].innerText;
+            var itemValues = CategoryList.get({
+                id: itemId,
+            });
+
+            itemValues.forEach(function(x) {
+                deleteid = new DOMParser().parseFromString(x._values.id, "text/html");
+
+                var isElem = deleteid.body.firstElementChild;
+                var isdeleteid = deleteid.body.firstElementChild.innerHTML;
+                if (isdeleteid == itemId) {
+                    document.getElementById("delete-record").addEventListener("click", function() {
+                        CategoryList.remove("id", isElem.outerHTML);
+                        document.getElementById("deleteCategory").click();
+                    });
+                }
+            });
+        });
+    });
 // }
 
-// function refreshCallbacks() {
-//     removeBtns.forEach(function(btn) {
-//         btn.addEventListener("click", function(e) {
-//             e.target.closest("tr").children[1].innerText;
-//             itemId = e.target.closest("tr").children[1].innerText;
-//             var itemValues = CategoryList.get({
-//                 id: itemId,
-//             });
-
-//             itemValues.forEach(function(x) {
-//                 deleteid = new DOMParser().parseFromString(x._values.id, "text/html");
-
-//                 var isElem = deleteid.body.firstElementChild;
-//                 var isdeleteid = deleteid.body.firstElementChild.innerHTML;
-//                 if (isdeleteid == itemId) {
-//                     document.getElementById("delete-record").addEventListener("click", function() {
-//                         CategoryList.remove("id", isElem.outerHTML);
-//                         document.getElementById("deleteCategory").click();
-//                     });
-//                 }
-//             });
-//         });
-//     });
-// }
-
-// document.querySelector("#CategoryList").addEventListener("click", function() {
-//     refreshCallbacks();
-//     ischeckboxcheck();
-// });
+document.querySelector("#CategoryList").addEventListener("click", function() {
+    // refreshCallbacks();
+    ischeckboxcheck();
+});
 
 // function clearFields() {
 //     customerNameField.value = "";
