@@ -9,13 +9,13 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12">
-            <div class="card"  id="CategoryList">
+            <div class="card"  id="ItemList">
                 <div class="card-header border-0">
                     <div class="d-flex align-items-center">
                         <h5 class="card-title mb-0 flex-grow-1">Category</h5>
                         <div class="flex-shrink-0">
                             <button class="btn btn-primary" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
-                            <a href="#" class="btn btn-soft-primary" onclick="newCategory()"><i class="ri-add-line align-bottom me-1"></i> Create Category</a>
+                            <a href="/inventory/new-item" class="btn btn-soft-primary"><i class="ri-add-line align-bottom me-1"></i> Create Item</a>
                         </div>
                     </div>
                 </div>
@@ -32,8 +32,8 @@
                             <!--end col-->
                             <div class="col-xxl-3 col-sm-3">
                                 <div class="search-box">
-                                    <input type="number" class="form-control  bg-light border-light" id="search-hsn" 
-                                        placeholder="Search for HSN code...">
+                                    <input type="text" class="form-control  bg-light border-light" id="search-model" 
+                                        placeholder="Search for model...">
                                     <i class="ri-search-line search-icon"></i>
                                 </div>
                             </div>
@@ -42,8 +42,8 @@
                                 <div class="input-light">
                                     <select class="form-control" name="choices-single-default"  id="search-status">
                                         <option value="" selected>Status</option>
-                                        <option value="1">Active</option>
-                                        <option value="0">Non-Active</option>
+                                        <option value="1">Published</option>
+                                        <option value="0">Hidden</option>
                                     </select>
                                 </div>
                             </div>
@@ -70,14 +70,16 @@
                                                 <input class="form-check-input" type="checkbox" id="checkAll" value="option">
                                             </div>
                                         </th>
-                                        <th class="sort text-uppercase" data-sort="name">Name</th>
+                                        <th class="sort text-uppercase" data-sort="name">Category</th>
                                         <th class="sort text-uppercase" data-sort="unit">
-                                            Unit</th>
-                                        <th class="sort text-uppercase" data-sort="tax_preference">Tax Preference</th>
-                                        <th class="sort text-uppercase" data-sort="hsn_code">HSN Code</th>
-                                        <th class="sort text-uppercase" data-sort="tax_rate">Tax Rate</th>
+                                            Name</th>
+                                        <th class="sort text-uppercase" data-sort="tax_preference">BRAND LOGO</th>
+                                        <th class="sort text-uppercase" data-sort="hsn_code">Model</th>
+                                        <th class="sort text-uppercase" data-sort="tax_rate">H/W VERSION</th>
                                         <th class="sort text-uppercase" data-sort="status">
-                                            Status</th>
+                                            Stocks</th>
+                                        <th class="sort text-uppercase" data-sort="tax_rate">Created</th>
+                                        <th class="sort text-uppercase" data-sort="tax_rate">Status</th>
                                         <th class="text-uppercase">Action</th>
                                     </tr>
                                 </thead>

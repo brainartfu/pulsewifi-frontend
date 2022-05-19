@@ -27,7 +27,7 @@ function UpdateItemsList () {
                         case 0:
                             badge = "warning";
                     }
- CATEGORY TYPE, ITEM NAME, BRAND LOGO, MODEL, H/W VERSION, IMAGE, DESCRIPTION,  AVAILABLE STOCK, CREATED ON, STATUS
+
                     var tableRawData = `<tr>
                                 <th scope="row">
                                     <div class="form-check">
@@ -35,13 +35,14 @@ function UpdateItemsList () {
                                     </div>
                                 </th>
                                 <td class="id"  style="display: none;">`+raw.id+`</td>
-                                <td class="unit">`+raw.cName+`</td>
+                                <td class="category">`+raw.cName+`</td>
                                 <td class="name">` + raw.name + `</td>
                                 <td class="unit">`+raw.brand+`</td>
-                                <td class="tax_preference">`+(raw.tax_preference?'Taxable':'None-Taxable')+`</td>
-                                <td class="hsn_code">`+raw.hsn_code+`</td>
-                                <td class="tax_rate">`+raw.tax_rate+`</td>
-                                <td class="status"><span class="badge badge-soft-` + badge + ` text-uppercase">` + (raw.status?'Active':'Non Active') + `</span>
+                                <td class="tax_preference">`+raw.model+`</td>
+                                <td class="hsn_code">`+raw.hardware_version+`</td>
+                                <td class="tax_rate">`+raw.stocks+`</td>
+                                <td class="tax_rate">`+raw.created_at.split('T')[0]+`</td>
+                                <td class="status"><span class="badge badge-soft-` + badge + ` text-uppercase">` + (raw.status?'Published':'Hidden') + `</span>
                                 </td>
                                 <td>
                                     <div class="dropdown">
@@ -49,8 +50,8 @@ function UpdateItemsList () {
                                             <i class="ri-more-fill align-middle"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end">
-                                            <li><button class="dropdown-item" href="javascript:void(0);" onclick="EditCateogry(this);" data-id="` + raw.id + `"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                    Edit</button></li>
+                                            <li><a  href="/inventory/new-item?id=`+raw.id+`"><button class="dropdown-item"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
+                                                    Edit</button></a></li>
                                             <li class="dropdown-divider"></li>
                                             <li>
                                                 <a class="dropdown-item remove-item-btn" data-bs-toggle="modal"  href="javascript:void(0);" onclick="DeleteCategory(this)" data-id="`+raw.id+`">
@@ -130,10 +131,10 @@ var options = {
 };
 
 // Init list
-let CategoryList = {};
+let ItemList = {};
 function initTable() {
     console.log('init')
-        CategoryList = new List("CategoryList", options).on(
+        ItemList = new List("ItemList", options).on(
             "updated",
             function(list) {
                 list.matchingItems.length == 0 ?
@@ -172,10 +173,10 @@ function initTable() {
 
 function SearchData() {
     const searchname = $('#search-name').val();
-    const searchhsn = $('#search-hsn').val();
+    const searchmodel = $('#search-model').val();
     const searchstatus = $('#search-status').val();
 
-    CategoryList.filter(function(data) {
+    ItemList.filter(function(data) {
         matchData = new DOMParser().parseFromString(
             data.values().status,
             "text/html"
@@ -186,7 +187,7 @@ function SearchData() {
         if (searchname && searchname !== data.values().name) {
             return false
         }   
-        if (searchhsn && searchhsn !== data.values().hsn_code) {
+        if (searchmodel && searchmodel !== data.values().model) {
             return false
         }
         if (searchstatus !== '' && searchstatus*1 !== status) {
@@ -194,7 +195,7 @@ function SearchData() {
         }
         return true;
     });
-    CategoryList.update();
+    ItemList.update();
 }
 
 function ischeckboxcheck() {
@@ -210,7 +211,7 @@ function ischeckboxcheck() {
 }
 
 
-document.querySelector("#CategoryList").addEventListener("click", function() {
+document.querySelector("#ItemList").addEventListener("click", function() {
     ischeckboxcheck();
 });
 
@@ -233,7 +234,7 @@ function DeleteCategory(data, multi = false) {
     if (confirm('Are you sure you want to delete this?')) {
       $.ajax({
         type: "post",
-        url: api.url + "inventory/delete-category",
+        url: api.url + "inventory/delete-item",
         data: {ids:ids},
         headers: {
             Authorization: localStorage.getItem("token"),
@@ -249,7 +250,7 @@ function DeleteCategory(data, multi = false) {
                 })
 
                 ids.forEach(function(id) {
-                    CategoryList.remove("id", id);
+                    ItemList.remove("id", id);
                 });
                 document.getElementById('checkAll').checked = false;
                 UpdateItemsList(true);
@@ -276,11 +277,7 @@ function deleteMultiple() {
     });
 
     if (typeof ids_array !== 'undefined' && ids_array.length > 0) {
-        if (confirm('Are you sure you want to delete this?')) {
-            DeleteCategory(ids_array, true);
-        } else {
-            return false;
-        }
+        DeleteCategory(ids_array, true);
     } else {
         Swal.fire({
             title: 'Please select at least one checkbox',

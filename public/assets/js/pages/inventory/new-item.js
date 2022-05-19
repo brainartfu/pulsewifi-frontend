@@ -35,7 +35,7 @@ $(document).ready(function() {
 		const alterid = window.location.href.split('?')[1].split('=')[1];
 		$.ajax({
 	        type: "post",
-	        url: api.url + "inventory/get_device_by_id",
+	        url: api.url + "inventory/get_item_by_id",
 	        data: {id: alterid},
 	        headers: {
 	            Authorization: localStorage.getItem("token"),
