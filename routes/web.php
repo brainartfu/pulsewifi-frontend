@@ -49,7 +49,8 @@ Route::get('invoice/create', [App\Http\Controllers\InvoiceController::class, 'cr
 Route::get('tickets', [App\Http\Controllers\TicketController::class, 'index']);
 
 Route::get('inventory/category', [App\Http\Controllers\InventoryController::class, 'category']);
-Route::get('inventory/models', [App\Http\Controllers\InventoryController::class, 'models']);
+Route::get('inventory/items', [App\Http\Controllers\InventoryController::class, 'items']);
+Route::get('inventory/new-item', [App\Http\Controllers\InventoryController::class, 'newItem']);
 Route::get('inventory/stocks', [App\Http\Controllers\InventoryController::class, 'stocks']);
 Route::get('inventory/manage', [App\Http\Controllers\InventoryController::class, 'manage']);
 Route::get('inventory/devices', [App\Http\Controllers\InventoryController::class, 'devices']);

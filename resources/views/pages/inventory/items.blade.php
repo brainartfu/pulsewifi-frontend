@@ -207,7 +207,7 @@
 @section('script')
     <script src="{{ URL::asset('assets/libs/list.js/list.js.min.js') }}"></script>
     <script src="{{ URL::asset('assets/libs/list.pagination.js/list.pagination.js.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/js/pages/inventory/category.js') }}"></script>
+    <script src="{{ URL::asset('assets/js/pages/inventory/items.js') }}"></script>
     <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 @endsection

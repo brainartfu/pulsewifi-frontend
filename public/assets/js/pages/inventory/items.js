@@ -8,10 +8,10 @@ var Categories = [{
     tax_rate: 123,
     status: '0',
 }];
-function UpdateCategoryList () {
+function UpdateItemsList () {
     $.ajax({
         type: "post",
-        url: api.url + "inventory/get_category",
+        url: api.url + "inventory/get_items",
         success: function(response) {
             const data = response.data;
             console.log(data)
@@ -27,7 +27,7 @@ function UpdateCategoryList () {
                         case 0:
                             badge = "warning";
                     }
-
+ CATEGORY TYPE, ITEM NAME, BRAND LOGO, MODEL, H/W VERSION, IMAGE, DESCRIPTION,  AVAILABLE STOCK, CREATED ON, STATUS
                     var tableRawData = `<tr>
                                 <th scope="row">
                                     <div class="form-check">
@@ -35,8 +35,9 @@ function UpdateCategoryList () {
                                     </div>
                                 </th>
                                 <td class="id"  style="display: none;">`+raw.id+`</td>
+                                <td class="unit">`+raw.cName+`</td>
                                 <td class="name">` + raw.name + `</td>
-                                <td class="unit">`+raw.unit+`</td>
+                                <td class="unit">`+raw.brand+`</td>
                                 <td class="tax_preference">`+(raw.tax_preference?'Taxable':'None-Taxable')+`</td>
                                 <td class="hsn_code">`+raw.hsn_code+`</td>
                                 <td class="tax_rate">`+raw.tax_rate+`</td>
@@ -74,7 +75,7 @@ function UpdateCategoryList () {
     })
 
 }
-UpdateCategoryList();
+UpdateItemsList();
 //ist form-check-all
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -251,7 +252,7 @@ function DeleteCategory(data, multi = false) {
                     CategoryList.remove("id", id);
                 });
                 document.getElementById('checkAll').checked = false;
-                UpdateCategoryList(true);
+                UpdateItemsList(true);
             }
           }
         },
@@ -264,62 +265,6 @@ function DeleteCategory(data, multi = false) {
       return false;
     }
 }
-function EditCateogry(data) {
-    const id = data.getAttribute('data-id');
-    const editData = Categories.filter((obj)=>obj.id==id);
-    console.log(editData)
-    $('#new-category-name').val(editData[0].name);
-    $('#new-category-unit').val(editData[0].unit);
-    $('#new-category-tax_preference').val(editData[0].tax_preference);
-    $('#new-category-hsn_code').val(editData[0].hsn_code);
-    $('#new-category-tax_rate').val(editData[0].tax_rate);
-    $('#new-category-status').val(editData[0].status);
-    $('#new-category-id').val(id);
-    $('#add-category-modal').modal('toggle');
-}
-
-function newCategory() {
-  $('#new-category-name').val('');
-  $('#new-category-unit').val('');
-  $('#new-category-hsn_code').val('');
-  $('#new-category-tax_rate').val('');
-  $('#new-category-id').val('new');
-  $('#add-category-modal').modal('toggle')
-}
-$('#new-category-save').click(function() {
-    $.ajax({
-          type: "post",
-          url: api.url + "inventory/new-category",
-          data: {
-            name: $('#new-category-name').val(),
-            unit: $('#new-category-unit').val(),
-            tax_preference: $('#new-category-tax_preference').val(),
-            hsn_code: $('#new-category-hsn_code').val(),
-            tax_rate: $('#new-category-tax_rate').val(),
-            status: $('#new-category-status').val(),
-            id: $('#new-category-id').val(),
-          },
-          headers: {
-              Authorization: localStorage.getItem("token"),
-          },
-          success: function(response) {
-            if (response.success) {
-                Swal.fire({
-                  title: 'Success!',
-                  text: response.message,
-                  icon: 'success',
-                  confirmButtonText: 'O K'
-                })
-                UpdateCategoryList();
-            }
-            $('#add-category-modal').modal('hide')
-          },
-          error: function(error) {
-              error.status == 0 && (window.location.href = "/login");
-              error.status == 404 && (window.location.href = "/auth-404-basic");
-          }
-    })
-})
 // Delete Multiple Records
 function deleteMultiple() {
     ids_array = [];
@@ -345,3 +290,56 @@ function deleteMultiple() {
         });
     }
 }
+
+// $(document).ready(function() {
+// 	const deleteDevice = (id) => {
+// 		console.log(id)
+// 	}
+// 	function getDevice() {
+// 		$.ajax({
+// 	        type: "post",
+// 	        url: api.url + "inventory/get_device",
+// 	        data: {
+// 	        	page: 0,
+// 	        	count: 10,
+// 	        	order: 'date',
+// 	        	search: {
+// 	        		name: 'device'
+// 	        	}
+// 	        },
+// 	        headers: {
+// 	            Authorization: localStorage.getItem("token"),
+// 	        },
+// 	        success: function(response) {
+// 	        	console.log(response.data)
+// 	        	const data = response.data;
+// 	        	let html = '';
+// 	        	if (data.length > 0) {
+// 		        	for (var i = 0; i < data.length; i++) {
+// 		        		html +=  `<tr>
+// 	                                <td class="order_date">${data[i]['created_at'].split('T')[0]}</td>
+// 	                                <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ001</a></td>
+// 	                                <td> ${data[i]['name']} </td>
+// 	                                <td> ${data[i]['cName']} </td>
+// 	                                <td> ${data[i]['model']} </td>
+// 	                                <td> ${data[i]['price']} </td>
+// 	                                <td> ${data[i]['brand']} </td>
+// 	                                <td class="status">
+// 	                                	<button class="btn btn-sm btn-outline-danger" onclick="deleteDevice(${data[i]['id']})">Delete</button>
+// 	                                	<a href="/inventory/devices?id=${data[i]['id']}"><button class="btn btn-sm btn-outline-info">Modify</button>
+// 	                                </td>
+// 	                            </tr>`
+// 		        	}
+// 	        	} else {
+// 	        		html +=  '<td colspan="7" style="text-align: center;"> Data don\'t exist.</td>'
+// 	        	}
+// 	        	$('.device-list').html(html);
+// 	        },
+// 	        error: function(error) {
+// 	            error.status == 0 && (window.location.href = "/login");
+// 	            error.status == 404 && (window.location.href = "/auth-404-basic");
+// 	        }
+// 		})
+// 	}
+// 	getDevice();
+// })

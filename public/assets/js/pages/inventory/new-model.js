@@ -17,26 +17,11 @@ $(document).ready(function() {
 	        	const data = response.data;
 	        	console.log(data)
 	        	if (response.success) {
-					let modelhtml = '';
 					let categoryhtml = '';
-					for (var i = 0; i < data.model.length; i++) {
-						modelhtml +=`<option value="${data.model[i]['id']}">${data.model[i]['name']}</option> `
+					for (var i = 0; i < data.length; i++) {
+						categoryhtml +=`<option value="${data[i]['id']}">${data[i]['name']}</option> `
 					}
-					for (var i = 0; i < data.category.length; i++) {
-						categoryhtml +=`<option value="${data.category[i]['id']}">${data.category[i]['name']}</option> `
-					}
-					console.log()
-	        		$("#device-model-input").html(modelhtml);
 					$("#device-category-input").html(categoryhtml);
-					// $("#device-name-input").val(data.name);
-					// $("#device-photo-input").val(data.photo);
-					// descriptionEditor.setData(data.description);
-					// $("#device-brand-input").val(data.brand);
-					// $("#device-model-input").val(data.model);
-					// $("#device-version-input").val(data.version);
-					// $("#device-category-input").val(data.category);
-					// $("#device-price-input").val(data.price);
-					// $("#device-shipping-input").val(data.shipping);
 	        	}
 
 	        },
@@ -59,12 +44,14 @@ $(document).ready(function() {
 	        	const data = response.data[0];
 	        	if (response.success) {
 					$("#device-name-input").val(data.name);
-					$("#device-photo-input").val(data.photo);
+					$("#device-photo-input").val(data.images);
 					descriptionEditor.setData(data.description);
 					$("#device-brand-input").val(data.brand);
 					$("#device-model-input").val(data.model);
-					$("#device-version-input").val(data.version);
+					$("#device-version-input").val(data.hardware_version);
 					$("#device-category-input").val(data.category);
+					$("#device-ean-input").val(data.ean);
+					$("#device-pachage-input").val(data.package_info);
 					$("#device-price-input").val(data.price);
 					$("#device-shipping-input").val(data.shipping);
 	        	}
@@ -80,23 +67,33 @@ $(document).ready(function() {
 	$('.device-create-btn').click(function() {
 		console.log(descriptionEditor.getData())
 		let formdata = new FormData();
-		$("#device-photo-input").prop('files')[0] && formdata.append('photo', $('#device-photo-input').prop('files')[0])
-
+		if (!$("#device-photo-input")[0].files[0]) {
+			window.alert('Select the Images.');
+			return false;
+		}
+		formdata.append('model_images', $("#device-photo-input")[0].files[0]);
 		let data = {
 			name: $("#device-name-input").val() || '',
-			photo: $("#device-photo-input").val() || '',
 			description: descriptionEditor.getData() || '',
 			brand: $("#device-brand-input").val() || '',
 			model: $("#device-model-input").val() || '',
-			version: $("#device-version-input").val() || '',
+			hardware_version: $("#device-version-input").val() || '',
+			ean: $("#device-ean-input").val() || '',
+			package_info: $("#device-package-input").val() || '',
 			category: $("#device-category-input").val() || '',
 			price: $("#device-price-input").val() || '',
 			shipping: $("#device-shipping-input").val() || '',
 		}
+		for (let key in data) {
+			formdata.append(key, data[key]);
+		}
+		// console.log(formdata.get('images'));
 		$.ajax({
 	        type: "post",
 	        url: api.url + "inventory/add_device",
-	        data: data,
+	        data: formdata,
+			processData: false,
+			contentType: false,
 	        headers: {
 	            Authorization: localStorage.getItem("token"),
 	        },

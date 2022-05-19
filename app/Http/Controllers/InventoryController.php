@@ -29,9 +29,13 @@ class InventoryController extends Controller
     {
         return view('pages.inventory.category');
     }
-    public function models()
+    public function items()
     {
-        return view('pages.inventory.models');
+        return view('pages.inventory.items');
+    }
+    public function newItem()
+    {
+        return view('pages.inventory.new-item');
     }
     public function stocks()
     {

@@ -27,6 +27,7 @@ return [
     "models"=>"Models",
     "stocks"=>"Stoks",
     "manage"=>"Manage",
+    "items"=>"Items",
 
     "device-models" => "Device Models",
     "manage-stocks" => "Manage Stocks",

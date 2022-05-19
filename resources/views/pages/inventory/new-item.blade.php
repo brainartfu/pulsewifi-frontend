@@ -11,7 +11,7 @@
         <div class="card" id="tasksList">
             <div class="card-header border-0">
                 <div class="d-flex align-items-center">
-                    <h5 class="card-title mb-0 flex-grow-1">Add Device</h5>
+                    <h5 class="card-title mb-0 flex-grow-1">Add Item</h5>
                 </div>
             </div>
             <div class="card-body border border-dashed border-end-0 border-start-0">
@@ -20,17 +20,17 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="mb-3">
-                                    <label class="form-label" for="project-title-input">Device Name</label>
-                                    <input type="text" class="form-control" id="device-name-input" placeholder="Enter Device Name">
+                                    <label class="form-label" for="project-title-input">Item Name</label>
+                                    <input type="text" class="form-control" id="device-name-input" placeholder="Enter Model Name">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label" for="project-thumbnail-img">Photo</label>
+                                    <label class="form-label" for="project-thumbnail-img">Image</label>
                                     <input class="form-control" id="device-photo-input" type="file" accept="image/png, image/gif, image/jpeg">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Device Description</label>
+                                    <label class="form-label">Description</label>
                                     <div id="device-description">
                                         
                                     </div>
@@ -46,13 +46,8 @@
                                     <div class="col-lg-4">
                                         <div class="mb-3 mb-lg-0">
                                             <label for="choices-status-input" class="form-label">Model</label>
-                                            <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="add-model" style="height: 22px;">
-                                                <i class="bx bx-shopping-bag fs-22"></i>
-                                            </button>
-                                            <select class="form-select" id="device-model-input">
-                                                <option value="Inprogress" selected>Inprogress</option>
-                                                <option value="Completed">Completed</option>
-                                            </select>
+                                            <input type="text" class="form-control" id="device-model-input" placeholder="Enter Brand">
+                                            
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
@@ -88,6 +83,14 @@
                                         <option value="4" selected>TP-Link Archer A6</option>
                                         <option value="5">EAP225 Indoor</option>
                                     </select>
+                                </div>
+                                <div>
+                                    <label for="choices-privacy-status-input" class="form-label">Package Info</label>
+                                    <input type="text" class="form-control" id="device-package-input" placeholder="Enter package">
+                                </div>
+                                <div>
+                                    <label for="choices-privacy-status-input" class="form-label">EAN</label>
+                                    <input type="text" class="form-control" id="device-ean-input" placeholder="Enter EAN">
                                 </div>
                                 <div>
                                     <label for="choices-privacy-status-input" class="form-label">Price</label>
@@ -168,6 +171,6 @@
 <script src="{{ URL::asset('assets/libs/list.pagination.js/list.pagination.js.min.js') }}"></script>
 <script src="{{ URL::asset('assets/js/pages/tasks-list.init.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
-<script src="{{ URL::asset('assets/js/pages/inventory/device.js') }}"></script>
+<script src="{{ URL::asset('assets/js/pages/inventory/new-model.js') }}"></script>
 <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 @endsection

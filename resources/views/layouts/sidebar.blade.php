@@ -151,7 +151,7 @@
                                 <a href="{{url('inventory/category')}}" class="nav-link">@lang('translation.category')</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{url('inventory/models')}}" class="nav-link">@lang('translation.models')</a>
+                                <a href="{{url('inventory/items')}}" class="nav-link">@lang('translation.items')</a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{url('inventory/stocks')}}" class="nav-link">@lang('translation.stocks')</a>
