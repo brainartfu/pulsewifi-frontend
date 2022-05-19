@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	const ckeditorClassic = document.querySelector('#device-description');
+	let alterid = ''
 	let descriptionEditor = '';
 	if (ckeditorClassic) {
 	  ClassicEditor.create(document.querySelector('#device-description')).then(function (editor) {
@@ -32,7 +33,7 @@ $(document).ready(function() {
 	};
 	initpage();
 	if (window.location.href.split('?').length > 1) {
-		const alterid = window.location.href.split('?')[1].split('=')[1];
+		alterid = window.location.href.split('?')[1].split('=')[1];
 		$.ajax({
 	        type: "post",
 	        url: api.url + "inventory/get_item_by_id",
@@ -44,14 +45,14 @@ $(document).ready(function() {
 	        	const data = response.data[0];
 	        	if (response.success) {
 					$("#device-name-input").val(data.name);
-					$("#device-photo-input").val(data.images);
+					// $("#device-photo-input").val(data.images);
 					descriptionEditor.setData(data.description);
 					$("#device-brand-input").val(data.brand);
 					$("#device-model-input").val(data.model);
 					$("#device-version-input").val(data.hardware_version);
 					$("#device-category-input").val(data.category);
 					$("#device-ean-input").val(data.ean);
-					$("#device-pachage-input").val(data.package_info);
+					$("#device-package-input").val(data.package_info);
 					$("#device-price-input").val(data.price);
 					$("#device-shipping-input").val(data.shipping);
 	        	}
@@ -67,11 +68,12 @@ $(document).ready(function() {
 	$('.device-create-btn').click(function() {
 		console.log(descriptionEditor.getData())
 		let formdata = new FormData();
-		if (!$("#device-photo-input")[0].files[0]) {
+		if (!alterid && !$("#device-photo-input")[0].files[0]) {
 			window.alert('Select the Images.');
 			return false;
+		} else {
+			formdata.append('model_images', $("#device-photo-input")[0].files[0]);
 		}
-		formdata.append('model_images', $("#device-photo-input")[0].files[0]);
 		let data = {
 			name: $("#device-name-input").val() || '',
 			description: descriptionEditor.getData() || '',
@@ -86,6 +88,9 @@ $(document).ready(function() {
 		}
 		for (let key in data) {
 			formdata.append(key, data[key]);
+		}
+		if (alterid) {
+			formdata.append('id', alterid);
 		}
 		// console.log(formdata.get('images'));
 		$.ajax({
@@ -117,71 +122,71 @@ $(document).ready(function() {
 		})
 	})
 
-	$('#add-category').click(function() {
-		$('#new-model-name').val('');
-		$('#add-category-modal').modal('toggle')
-	})
-	$('#add-model').click(function() {
-		$('#new-category-name').val('');
-		$('#add-model-modal').modal('toggle')
-	})
-	$('#new-model-save').click(function() {
-		if ($('#new-model-name').val() !== '') {
-			$.ajax({
-		        type: "post",
-		        url: api.url + "inventory/new-model",
-		        data: {name: $('#new-model-name').val()},
-		        headers: {
-		            Authorization: localStorage.getItem("token"),
-		        },
-		        success: function(response) {
-		        	if (response.success) {
-						Swal.fire({
-						  title: 'Success!',
-						  text: response.message,
-						  icon: 'success',
-						  confirmButtonText: 'O K'
-						})
-		        	}
-					$('#add-model-modal').modal('hide')
+	// $('#add-category').click(function() {
+	// 	$('#new-model-name').val('');
+	// 	$('#add-category-modal').modal('toggle')
+	// })
+	// $('#add-model').click(function() {
+	// 	$('#new-category-name').val('');
+	// 	$('#add-model-modal').modal('toggle')
+	// })
+	// $('#new-model-save').click(function() {
+	// 	if ($('#new-model-name').val() !== '') {
+	// 		$.ajax({
+	// 	        type: "post",
+	// 	        url: api.url + "inventory/new-model",
+	// 	        data: {name: $('#new-model-name').val()},
+	// 	        headers: {
+	// 	            Authorization: localStorage.getItem("token"),
+	// 	        },
+	// 	        success: function(response) {
+	// 	        	if (response.success) {
+	// 					Swal.fire({
+	// 					  title: 'Success!',
+	// 					  text: response.message,
+	// 					  icon: 'success',
+	// 					  confirmButtonText: 'O K'
+	// 					})
+	// 	        	}
+	// 				$('#add-model-modal').modal('hide')
 
-		        },
-		        error: function(error) {
-		            error.status == 0 && (window.location.href = "/login");
-		            error.status == 404 && (window.location.href = "/auth-404-basic");
-		        }
-			})
+	// 	        },
+	// 	        error: function(error) {
+	// 	            error.status == 0 && (window.location.href = "/login");
+	// 	            error.status == 404 && (window.location.href = "/auth-404-basic");
+	// 	        }
+	// 		})
 
-		}
-	})
-	$('#new-category-save').click(function() {
-		if ($('#new-category-name').val() !== '') {
-			$.ajax({
-		        type: "post",
-		        url: api.url + "inventory/new-category",
-		        data: {name: $('#new-category-name').val()},
-		        headers: {
-		            Authorization: localStorage.getItem("token"),
-		        },
-		        success: function(response) {
-		        	if (response.success) {
-			        	if (response.success) {
-							Swal.fire({
-							  title: 'Success!',
-							  text: response.message,
-							  icon: 'success',
-							  confirmButtonText: 'O K'
-							})
-			        	}
-		        	}
-					$('#add-model-modal').modal('hide')
+	// 	}
+	// })
+	// $('#new-category-save').click(function() {
+	// 	if ($('#new-category-name').val() !== '') {
+	// 		$.ajax({
+	// 	        type: "post",
+	// 	        url: api.url + "inventory/new-category",
+	// 	        data: {name: $('#new-category-name').val()},
+	// 	        headers: {
+	// 	            Authorization: localStorage.getItem("token"),
+	// 	        },
+	// 	        success: function(response) {
+	// 	        	if (response.success) {
+	// 		        	if (response.success) {
+	// 						Swal.fire({
+	// 						  title: 'Success!',
+	// 						  text: response.message,
+	// 						  icon: 'success',
+	// 						  confirmButtonText: 'O K'
+	// 						})
+	// 		        	}
+	// 	        	}
+	// 				$('#add-model-modal').modal('hide')
 
-		        },
-		        error: function(error) {
-		            error.status == 0 && (window.location.href = "/login");
-		            error.status == 404 && (window.location.href = "/auth-404-basic");
-		        }
-			})
-		}
-	})
+	// 	        },
+	// 	        error: function(error) {
+	// 	            error.status == 0 && (window.location.href = "/login");
+	// 	            error.status == 404 && (window.location.href = "/auth-404-basic");
+	// 	        }
+	// 		})
+	// 	}
+	// })
 })
