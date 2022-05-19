@@ -12,10 +12,10 @@
             <div class="card"  id="CategoryList">
                 <div class="card-header border-0">
                     <div class="d-flex align-items-center">
-                        <h5 class="card-title mb-0 flex-grow-1">Category</h5>
+                        <h5 class="card-title mb-0 flex-grow-1">Stocks</h5>
                         <div class="flex-shrink-0">
                             <button class="btn btn-primary" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
-                            <a href="#" class="btn btn-soft-primary" onclick="newCategory()"><i class="ri-add-line align-bottom me-1"></i> Create Category</a>
+                            <a href="#" class="btn btn-soft-primary" onclick="newCategory()"><i class="ri-add-line align-bottom me-1"></i> Create stock</a>
                         </div>
                     </div>
                 </div>
@@ -24,7 +24,7 @@
                         <div class="row g-3">
                             <div class="col-xxl-3 col-sm-4">
                                 <div class="search-box">
-                                    <input type="text" class="form-control  bg-light border-light" id="search-name"
+                                    <input type="text" class="form-control search  bg-light border-light" id="search-name"
                                         placeholder="Search for name...">
                                     <i class="ri-search-line search-icon"></i>
                                 </div>
@@ -33,7 +33,7 @@
                             <div class="col-xxl-3 col-sm-3">
                                 <div class="search-box">
                                     <input type="number" class="form-control  bg-light border-light" id="search-hsn" 
-                                        placeholder="Search for HSN code...">
+                                        placeholder="Search for model...">
                                     <i class="ri-search-line search-icon"></i>
                                 </div>
                             </div>
@@ -43,7 +43,9 @@
                                     <select class="form-control" name="choices-single-default"  id="search-status">
                                         <option value="" selected>Status</option>
                                         <option value="1">Active</option>
-                                        <option value="0">Non-Active</option>
+                                        <option value="2">Blocked</option>
+                                        <option value="3">Broken</option>
+                                        <option value="4">Died</option>
                                     </select>
                                 </div>
                             </div>
@@ -72,10 +74,10 @@
                                         </th>
                                         <th class="sort text-uppercase" data-sort="name">Name</th>
                                         <th class="sort text-uppercase" data-sort="unit">
-                                            Unit</th>
-                                        <th class="sort text-uppercase" data-sort="tax_preference">Tax Preference</th>
-                                        <th class="sort text-uppercase" data-sort="hsn_code">HSN Code</th>
-                                        <th class="sort text-uppercase" data-sort="tax_rate">Tax Rate</th>
+                                            Serial no</th>
+                                        <th class="sort text-uppercase" data-sort="tax_preference">Model</th>
+                                        <th class="sort text-uppercase" data-sort="hsn_code">Category</th>
+                                        <th class="sort text-uppercase" data-sort="tax_rate">Mac</th>
                                         <th class="sort text-uppercase" data-sort="status">
                                             Status</th>
                                         <th class="text-uppercase">Action</th>
@@ -172,27 +174,27 @@
                     <div class="col-12"> 
                         <div class="mb-3">
                             <label class="form-label">MAC</label>
-                            <input class="form-control" placeholder="Enter MAC..." type="text" name="title" id="new-stock-mac" required value="" />
+                            <input class="form-control" placeholder="Enter MAC..." type="text" name="title" id="new-stock-mac"/>
                             <div class="invalid-feedback">Please provide a valid MAC</div>
                         </div>
                     </div><!--end col-->
                     <div class="col-12"> 
                         <div class="mb-3">
                             <label class="form-label">Serial No</label>
-                            <input class="form-control" placeholder="Enter MAC..." type="number" name="title" id="new-stock-serial" required value="" />
+                            <input class="form-control" placeholder="Enter MAC..." type="number" name="title" id="new-stock-serial"/>
                         </div>
                     </div><!--end col-->
                     <div class="col-12"> 
                         <div class="mb-3">
                             <label class="form-label">WLAN0 MAC</label>
-                            <input class="form-control" placeholder="Enter MAC..." type="text" name="title" id="new-stock-wlan0" required value="" />
+                            <input class="form-control" placeholder="Enter MAC..." type="text" name="title" id="new-stock-wlan0"/>
                             <div class="invalid-feedback">Please provide a valid MAC...</div>
                         </div>
                     </div><!--end col-->
                     <div class="col-12"> 
                         <div class="mb-3">
                             <label class="form-label">WLAN1 MAC</label>
-                            <input class="form-control" placeholder="Enter MAC..." type="text" name="title" id="new-stock-wlan1" required value="" />
+                            <input class="form-control" placeholder="Enter MAC..." type="text" name="title" id="new-stock-wlan1"/>
                             <div class="invalid-feedback">Please provide a valid MAC...</div>
                         </div>
                     </div><!--end col-->

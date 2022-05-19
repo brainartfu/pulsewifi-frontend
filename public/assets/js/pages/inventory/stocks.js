@@ -15,13 +15,18 @@ function init() {
 	    success: function(response) {
 	    	const data = response.data;
 	    	console.log(data)
-	    	// if (response.success) {
-			// 	let categoryhtml = '';
-			// 	for (var i = 0; i < data.length; i++) {
-			// 		categoryhtml +=`<option value="${data[i]['id']}">${data[i]['name']}</option> `
-			// 	}
-			// 	$("#device-category-input").html(categoryhtml);
-	    	// }
+	    	if (response.success) {
+				let categoryhtml = '';
+				for (var i = 0; i < data.category.length; i++) {
+					categoryhtml +=`<option value="${data.category[i]['id']}">${data.category[i]['name']}</option> `
+				}
+				$("#new-stock-category").html(categoryhtml);
+				let modelhtml = '';
+				for (var i = 0; i < data.model.length; i++) {
+					modelhtml +=`<option value="${data.model[i]['id']}">${data.model[i]['name']}</option> `
+				}
+				$("#new-stock-model").html(modelhtml);
+	    	}
 
 	    },
 	    error: function(error) {
