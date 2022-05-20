@@ -78,7 +78,8 @@ $(document).ready(function() {
 		if (!alterid && !$("#device-photo-input")[0].files[0]) {
 			window.alert('Select the Images.');
 			return false;
-		} else {
+		} 
+		if ($("#device-photo-input")[0].files[0]) {
 			formdata.append('model_images', $("#device-photo-input")[0].files[0]);
 		}
 		let data = {
@@ -119,6 +120,17 @@ $(document).ready(function() {
 						  confirmButtonText: 'O K'
 						})
 		        	}	        		
+	        	} else {
+	        		let message = '';
+	        		for (let key in response.data) {
+	        			message += response.data[key].join(' \n ') + '\n'
+	        		}
+	        		Swal.fire({
+					  title: 'Failure!',
+					  text: message,
+					  icon: 'error',
+					  confirmButtonText: 'Ok'
+					})
 	        	}
 
 	        },

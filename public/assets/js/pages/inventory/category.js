@@ -331,11 +331,7 @@ function deleteMultiple() {
     });
 
     if (typeof ids_array !== 'undefined' && ids_array.length > 0) {
-        if (confirm('Are you sure you want to delete this?')) {
-            DeleteCategory(ids_array, true);
-        } else {
-            return false;
-        }
+        DeleteCategory(ids_array, true);
     } else {
         Swal.fire({
             title: 'Please select at least one checkbox',

@@ -156,9 +156,9 @@
                             <li class="nav-item">
                                 <a href="{{url('inventory/stocks')}}" class="nav-link">@lang('translation.stocks')</a>
                             </li>
-                            <li class="nav-item">
+                           <!--  <li class="nav-item">
                                 <a href="{{url('inventory/manage')}}" class="nav-link">@lang('translation.manage')</a>
-                            </li>
+                            </li> -->
                         </ul>
                     </div>
                 </li>

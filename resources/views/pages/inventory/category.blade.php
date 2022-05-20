@@ -158,7 +158,7 @@
                     <div class="col-12"> 
                         <div class="mb-3">
                             <label class="form-label">Unit</label>
-                            <input class="form-control" placeholder="Enter category name" type="text" name="title" id="new-category-unit" required value="" />
+                            <input class="form-control" placeholder="Enter category unit" type="text" name="title" id="new-category-unit" required value="" />
                             <div class="invalid-feedback">Please provide a valid category unit</div>
                         </div>
                     </div><!--end col-->
