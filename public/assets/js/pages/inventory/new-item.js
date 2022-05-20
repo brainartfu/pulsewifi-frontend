@@ -13,16 +13,23 @@ $(document).ready(function() {
 	function initpage() {
 		$.ajax({
 	        type: "post",
-	        url: api.url + "inventory/get_category",
+	        url: api.url + "inventory/get_category_brand_model",
 	        success: function(response) {
 	        	const data = response.data;
 	        	console.log(data)
 	        	if (response.success) {
 					let categoryhtml = '';
-					for (var i = 0; i < data.length; i++) {
-						categoryhtml +=`<option value="${data[i]['id']}">${data[i]['name']}</option> `
+					for (var i = 0; i < data['category'].length; i++) {
+						categoryhtml +=`<option value="${data['category'][i]['id']}">${data['category'][i]['name']}</option> `
 					}
 					$("#device-category-input").html(categoryhtml);
+					let brandhtml = '';
+					for (var i = 0; i < data['brand'].length; i++) {
+						brandhtml +=`<option value="${data['brand'][i]['id']}">${data['brand'][i]['name']}</option> `
+					}
+					$("#device-brand-input").html(brandhtml);
+					brandhtml = "<option value='new'>New Brand</option>" + brandhtml;
+					$("#add-brand-id").html(brandhtml);
 	        	}
 
 	        },
@@ -121,72 +128,52 @@ $(document).ready(function() {
 	        }
 		})
 	})
+	$('#add-brand-id').change(function(ele) {
+		if ($("#add-brand-id").val() === 'new') {
+			$('#add-brand-name').val('');
+		} else {
+			$('#add-brand-name').val($("#add-brand-id :selected").text());
+		}
+	})
+	$('#add-brand').click(function() {
+		$('#new-brand-id').val('new');
+		$('#new-brand-name').val('');
+		$('#add-brand-modal').modal('toggle')
+	})
 
-	// $('#add-category').click(function() {
-	// 	$('#new-model-name').val('');
-	// 	$('#add-category-modal').modal('toggle')
-	// })
-	// $('#add-model').click(function() {
-	// 	$('#new-category-name').val('');
-	// 	$('#add-model-modal').modal('toggle')
-	// })
-	// $('#new-model-save').click(function() {
-	// 	if ($('#new-model-name').val() !== '') {
-	// 		$.ajax({
-	// 	        type: "post",
-	// 	        url: api.url + "inventory/new-model",
-	// 	        data: {name: $('#new-model-name').val()},
-	// 	        headers: {
-	// 	            Authorization: localStorage.getItem("token"),
-	// 	        },
-	// 	        success: function(response) {
-	// 	        	if (response.success) {
-	// 					Swal.fire({
-	// 					  title: 'Success!',
-	// 					  text: response.message,
-	// 					  icon: 'success',
-	// 					  confirmButtonText: 'O K'
-	// 					})
-	// 	        	}
-	// 				$('#add-model-modal').modal('hide')
+	$('#add-brand-save').click(function() {
+		if ($('#add-brand-name').val() == '') {
+			window.alert('name require.');
+			return true;
+		}
+		$.ajax({
+	        type: "post",
+	        url: api.url + "inventory/add-brand",
+	        data: {
+	        	name: $('#add-brand-name').val(),
+	        	id: $('#add-brand-id').val()
+	        },
+	        headers: {
+	            Authorization: localStorage.getItem("token"),
+	        },
+	        success: function(response) {
+	        	if (response.success) {
+		        	if (response.success) {
+						Swal.fire({
+						  title: 'Success!',
+						  text: response.message,
+						  icon: 'success',
+						  confirmButtonText: 'O K'
+						})
+		        	}
+	        	}
+				$('#add-brand-modal').modal('hide')
 
-	// 	        },
-	// 	        error: function(error) {
-	// 	            error.status == 0 && (window.location.href = "/login");
-	// 	            error.status == 404 && (window.location.href = "/auth-404-basic");
-	// 	        }
-	// 		})
-
-	// 	}
-	// })
-	// $('#new-category-save').click(function() {
-	// 	if ($('#new-category-name').val() !== '') {
-	// 		$.ajax({
-	// 	        type: "post",
-	// 	        url: api.url + "inventory/new-category",
-	// 	        data: {name: $('#new-category-name').val()},
-	// 	        headers: {
-	// 	            Authorization: localStorage.getItem("token"),
-	// 	        },
-	// 	        success: function(response) {
-	// 	        	if (response.success) {
-	// 		        	if (response.success) {
-	// 						Swal.fire({
-	// 						  title: 'Success!',
-	// 						  text: response.message,
-	// 						  icon: 'success',
-	// 						  confirmButtonText: 'O K'
-	// 						})
-	// 		        	}
-	// 	        	}
-	// 				$('#add-model-modal').modal('hide')
-
-	// 	        },
-	// 	        error: function(error) {
-	// 	            error.status == 0 && (window.location.href = "/login");
-	// 	            error.status == 404 && (window.location.href = "/auth-404-basic");
-	// 	        }
-	// 		})
-	// 	}
-	// })
+	        },
+	        error: function(error) {
+	            error.status == 0 && (window.location.href = "/login");
+	            error.status == 404 && (window.location.href = "/auth-404-basic");
+	        }
+		})
+	})
 })

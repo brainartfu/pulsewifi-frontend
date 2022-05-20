@@ -11,7 +11,7 @@ var Categories = [{
 function init() {
 	$.ajax({
 	    type: "post",
-	    url: api.url + "inventory/get_category_model",
+	    url: api.url + "inventory/get_category_brand_model",
 	    success: function(response) {
 	    	const data = response.data;
 	    	console.log(data)
@@ -26,6 +26,11 @@ function init() {
 					modelhtml +=`<option value="${data.model[i]['id']}">${data.model[i]['name']}</option> `
 				}
 				$("#new-stock-model").html(modelhtml);
+                let brandhtml = '';
+                for (var i = 0; i < data.brand.length; i++) {
+                    brandhtml +=`<option value="${data.brand[i]['id']}">${data.brand[i]['name']}</option> `
+                }
+                $("#new-stock-brand").html(brandhtml);
 	    	}
 
 	    },
@@ -34,10 +39,10 @@ function init() {
 	    }
 	})
 }
-function UpdateCategoryList () {
+function UpdateStockList () {
     $.ajax({
         type: "post",
-        url: api.url + "inventory/get_category",
+        url: api.url + "inventory/get-stock",
         success: function(response) {
             const data = response.data;
             console.log(data)
@@ -50,8 +55,15 @@ function UpdateCategoryList () {
                         case 1:
                             badge = "success";
                             break;
-                        case 0:
+                        case 2:
+                            badge = "info";
+                            break;
+                        case 3:
                             badge = "warning";
+                            break;
+                        case 4:
+                            badge = "danger";
+                            break;
                     }
 
                     var tableRawData = `<tr>
@@ -61,11 +73,16 @@ function UpdateCategoryList () {
                                     </div>
                                 </th>
                                 <td class="id"  style="display: none;">`+raw.id+`</td>
-                                <td class="name">` + raw.name + `</td>
-                                <td class="unit">`+raw.unit+`</td>
-                                <td class="tax_preference">`+(raw.tax_preference?'Taxable':'None-Taxable')+`</td>
-                                <td class="hsn_code">`+raw.hsn_code+`</td>
-                                <td class="tax_rate">`+raw.tax_rate+`</td>
+                                <td class="name">`+raw.name+`</td>
+                                <td class="category_name">`+raw.category_name+`</td>
+                                <td class="brand_name">` + raw.brand_name + `</td>
+                                <td class="model_name">`+raw.model_name+`</td>
+                                <td class="mac_address">`+raw.mac_address+`</td>
+                                <td class="serial_num">`+raw.serial_num+`</td>
+                                <td class="wlan0">`+raw.wlan0+`</td>
+                                <td class="wlan1">`+raw.wlan1+`</td>
+                                <td class="user_name">`+raw.user_name+`</td>
+                                <td class="location">`+raw.location_id+`</td>
                                 <td class="status"><span class="badge badge-soft-` + badge + ` text-uppercase">` + (raw.status?'Active':'Non Active') + `</span>
                                 </td>
                                 <td>
@@ -74,11 +91,11 @@ function UpdateCategoryList () {
                                             <i class="ri-more-fill align-middle"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end">
-                                            <li><button class="dropdown-item" href="javascript:void(0);" onclick="EditCateogry(this);" data-id="` + raw.id + `"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
+                                            <li><button class="dropdown-item" href="javascript:void(0);" onclick="EditStock(this);" data-id="` + raw.id + `"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                     Edit</button></li>
                                             <li class="dropdown-divider"></li>
                                             <li>
-                                                <a class="dropdown-item remove-item-btn" data-bs-toggle="modal"  href="javascript:void(0);" onclick="DeleteCategory(this)" data-id="`+raw.id+`">
+                                                <a class="dropdown-item remove-item-btn" data-bs-toggle="modal"  href="javascript:void(0);" onclick="DeleteStock(this)" data-id="`+raw.id+`">
                                                     <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
                                                     Delete
                                                 </a>
@@ -100,7 +117,7 @@ function UpdateCategoryList () {
     })
 
 }
-UpdateCategoryList();
+UpdateStockList();
 init();
 //ist form-check-all
 
@@ -156,10 +173,10 @@ var options = {
 };
 
 // Init list
-let CategoryList = {};
+let StockList = {};
 function initTable() {
     console.log('init')
-        CategoryList = new List("CategoryList", options).on(
+        StockList = new List("StockList", options).on(
             "updated",
             function(list) {
                 list.matchingItems.length == 0 ?
@@ -201,7 +218,7 @@ function SearchData() {
     const searchhsn = $('#search-hsn').val();
     const searchstatus = $('#search-status').val();
 
-    CategoryList.filter(function(data) {
+    StockList.filter(function(data) {
         matchData = new DOMParser().parseFromString(
             data.values().status,
             "text/html"
@@ -220,7 +237,7 @@ function SearchData() {
         }
         return true;
     });
-    CategoryList.update();
+    StockList.update();
 }
 
 function ischeckboxcheck() {
@@ -236,7 +253,7 @@ function ischeckboxcheck() {
 }
 
 
-document.querySelector("#CategoryList").addEventListener("click", function() {
+document.querySelector("#StockList").addEventListener("click", function() {
     ischeckboxcheck();
 });
 
@@ -254,12 +271,12 @@ document.querySelector(".pagination-prev").addEventListener("click", function() 
 });
 
 
-function DeleteCategory(data, multi = false) {
+function DeleteStock(data, multi = false) {
     const ids = multi?data:[data.getAttribute('data-id')];
     if (confirm('Are you sure you want to delete this?')) {
       $.ajax({
         type: "post",
-        url: api.url + "inventory/delete-category",
+        url: api.url + "inventory/delete-stock",
         data: {ids:ids},
         headers: {
             Authorization: localStorage.getItem("token"),
@@ -275,10 +292,10 @@ function DeleteCategory(data, multi = false) {
                 })
 
                 ids.forEach(function(id) {
-                    CategoryList.remove("id", id);
+                    StockList.remove("id", id);
                 });
                 document.getElementById('checkAll').checked = false;
-                UpdateCategoryList(true);
+                UpdateStockList(true);
             }
           }
         },
@@ -291,40 +308,51 @@ function DeleteCategory(data, multi = false) {
       return false;
     }
 }
-function EditCateogry(data) {
+function EditStock(data) {
     const id = data.getAttribute('data-id');
     const editData = Categories.filter((obj)=>obj.id==id);
     console.log(editData)
-    $('#new-category-name').val(editData[0].name);
-    $('#new-category-unit').val(editData[0].unit);
-    $('#new-category-tax_preference').val(editData[0].tax_preference);
-    $('#new-category-hsn_code').val(editData[0].hsn_code);
-    $('#new-category-tax_rate').val(editData[0].tax_rate);
-    $('#new-category-status').val(editData[0].status);
-    $('#new-category-id').val(id);
-    $('#add-category-modal').modal('toggle');
+    $('#new-stock-id').val(id);
+    $('#new-stock-category').val(editData[0]['category']);
+    $('#new-stock-brand').val(editData[0]['brand']);
+    $('#new-stock-model').val(editData[0]['model_id']);
+    $('#new-stock-mac').val(editData[0]['mac']);
+    $('#new-stock-serial').val(editData[0]['serial_num']);
+    $('#new-stock-wlan0').val(editData[0]['wlan0']);
+    $('#new-stock-wlan1').val(editData[0]['wlan1']);
+    $('#new-stock-configure').val(editData[0]['configure']);
+    $('#new-stock-status').val(editData[0]['status']);
+    $("#new-stock-modal").modal('show');
 }
 
-function newCategory() {
-  $('#new-category-name').val('');
-  $('#new-category-unit').val('');
-  $('#new-category-hsn_code').val('');
-  $('#new-category-tax_rate').val('');
-  $('#new-category-id').val('new');
-  $('#add-category-modal').modal('toggle')
+function newStock() {
+  $('#new-stock-id').val('');
+  // $('#new-stock-category').val('');
+  // $('#new-stock-brand').val('');
+  // $('#new-stock-model').val('');
+  $('#new-stock-mac').val('');
+  $('#new-stock-serial').val('');
+  $('#new-stock-wlan0').val('');
+  $('#new-stock-wlan1').val('');
+  $('#new-stock-configure').val('1');
+  $('#new-stock-status').val('1');
+  $("#new-stock-modal").modal('show');
 }
-$('#new-category-save').click(function() {
+$('#new-stock-save').click(function() {
     $.ajax({
           type: "post",
-          url: api.url + "inventory/new-category",
+          url: api.url + "inventory/new-stock",
           data: {
-            name: $('#new-category-name').val(),
-            unit: $('#new-category-unit').val(),
-            tax_preference: $('#new-category-tax_preference').val(),
-            hsn_code: $('#new-category-hsn_code').val(),
-            tax_rate: $('#new-category-tax_rate').val(),
-            status: $('#new-category-status').val(),
-            id: $('#new-category-id').val(),
+            id: $('#new-stock-id').val(),
+            category: $('#new-stock-category').val(),
+            brand: $('#new-stock-brand').val(),
+            model_id: $('#new-stock-model').val(),
+            mac_address: $('#new-stock-mac').val(),
+            serial: $('#new-stock-serial').val(),
+            wlan0: $('#new-stock-wlan0').val(),
+            wlan1: $('#new-stock-wlan1').val(),
+            configure: $('#new-stock-configure').val(),
+            status: $('#new-stock-status').val()
           },
           headers: {
               Authorization: localStorage.getItem("token"),
@@ -337,9 +365,9 @@ $('#new-category-save').click(function() {
                   icon: 'success',
                   confirmButtonText: 'O K'
                 })
-                UpdateCategoryList();
+                UpdateStockList();
             }
-            $('#add-category-modal').modal('hide')
+            $('#add-stock-modal').modal('hide')
           },
           error: function(error) {
               error.status == 0 && (window.location.href = "/login");
@@ -359,7 +387,7 @@ function deleteMultiple() {
 
     if (typeof ids_array !== 'undefined' && ids_array.length > 0) {
         if (confirm('Are you sure you want to delete this?')) {
-            DeleteCategory(ids_array, true);
+            DeleteStock(ids_array, true);
         } else {
             return false;
         }

@@ -40,7 +40,11 @@
                                     <div class="col-lg-4">
                                         <div class="mb-3 mb-lg-0">
                                             <label for="choices-priority-input" class="form-label">brand</label>
-                                            <input type="text" class="form-control" id="device-brand-input" placeholder="Enter Brand">
+                                            <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="add-brand" style="height: 22px;">
+                                                <i class="bx bx-shopping-bag fs-22"></i>
+                                            </button>
+                                            <select class="form-select" id="device-brand-input">
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
@@ -113,52 +117,33 @@
         </div>
     </div>
 </div>
-<!-- Add New CATEGORY -->
-<div class="modal fade" id="add-category-modal" tabindex="-1">
+<div class="modal fade" id="add-brand-modal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0">
             <div class="modal-header p-3 bg-soft-info">
-                <h5 class="modal-title" id="modal-title">Add Category</h5>
+                <h5 class="modal-title" id="modal-title">Add Brand</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body p-4">
                 <div class="row event-form">
                     <div class="col-12">
                         <div class="mb-3">
-                            <label class="form-label">Name</label>
-                            <input class="form-control" placeholder="Enter category name" type="text" name="title" id="new-category-name" required value="" />
-                            <div class="invalid-feedback">Please provide a valid category name</div>
+                            <label class="form-label">New or Update</label>
+                            <select class="form-select" id="add-brand-id">
+                            </select>
                         </div>
                     </div><!--end col-->
-                </div><!--end row-->
-                <div class="hstack gap-2 justify-content-end">
-                    <button type="button" class="btn btn-soft-danger" id="btn-delete-event"><i class="ri-close-line align-bottom"></i> Delete</button>
-                    <button class="btn btn-success" id="new-category-save">Add Category</button>
-                </div>
-            </div>
-        </div> <!-- end modal-content-->
-    </div> <!-- end modal dialog-->
-</div> <!-- end modal--><!-- Add New MODEL -->
-<div class="modal fade" id="add-model-modal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0">
-            <div class="modal-header p-3 bg-soft-info">
-                <h5 class="modal-title" id="modal-title">Add Modal</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-            </div>
-            <div class="modal-body p-4">
-                <div class="row event-form">
                     <div class="col-12">
                         <div class="mb-3">
                             <label class="form-label">Name</label>
-                            <input class="form-control" placeholder="Enter Modal name" type="text" name="title" id="new-model-name" required value="" />
-                            <div class="invalid-feedback">Please provide a valid modal name</div>
+                            <input class="form-control" placeholder="Enter Modal name" type="text" name="title" id="add-brand-name" required value="" />
+                            <div class="invalid-feedback">Please provide a valid brand name</div>
                         </div>
                     </div><!--end col-->
                 </div><!--end row-->
                 <div class="hstack gap-2 justify-content-end">
                     <button type="button" class="btn btn-soft-danger" id="btn-delete-event"><i class="ri-close-line align-bottom"></i> Delete</button>
-                    <button  class="btn btn-success" id="new-model-save">Add Modal</button>
+                    <button  class="btn btn-success" id="add-brand-save">Add Brand</button>
                 </div>
             </div>
         </div> <!-- end modal-content-->

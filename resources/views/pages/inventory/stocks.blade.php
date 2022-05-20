@@ -9,13 +9,13 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12">
-            <div class="card"  id="CategoryList">
+            <div class="card"  id="StockList">
                 <div class="card-header border-0">
                     <div class="d-flex align-items-center">
                         <h5 class="card-title mb-0 flex-grow-1">Stocks</h5>
                         <div class="flex-shrink-0">
                             <button class="btn btn-primary" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
-                            <a href="#" class="btn btn-soft-primary" onclick="newCategory()"><i class="ri-add-line align-bottom me-1"></i> Create stock</a>
+                            <a href="#" class="btn btn-soft-primary" onclick="newStock()"><i class="ri-add-line align-bottom me-1"></i> Create stock</a>
                         </div>
                     </div>
                 </div>
@@ -73,13 +73,16 @@
                                             </div>
                                         </th>
                                         <th class="sort text-uppercase" data-sort="name">Name</th>
-                                        <th class="sort text-uppercase" data-sort="unit">
-                                            Serial no</th>
-                                        <th class="sort text-uppercase" data-sort="tax_preference">Model</th>
-                                        <th class="sort text-uppercase" data-sort="hsn_code">Category</th>
-                                        <th class="sort text-uppercase" data-sort="tax_rate">Mac</th>
-                                        <th class="sort text-uppercase" data-sort="status">
-                                            Status</th>
+                                        <th class="sort text-uppercase" data-sort="brand_name"> Category</th>
+                                        <th class="sort text-uppercase" data-sort="brand_name"> Brand</th>
+                                        <th class="sort text-uppercase" data-sort="model_name">Model</th>
+                                        <th class="sort text-uppercase" data-sort="mac_address">MAC</th>
+                                        <th class="sort text-uppercase" data-sort="serial_num">Serial Number</th>
+                                        <th class="sort text-uppercase" data-sort="wlan0_mac">WLAN0 MAC</th>
+                                        <th class="sort text-uppercase" data-sort="wlan1_mac">WLAN1 MAC</th>
+                                        <th class="sort text-uppercase" data-sort="user_name">OWNER</th>
+                                        <th class="sort text-uppercase" data-sort="location">LOCATION</th>
+                                        <th class="sort text-uppercase" data-sort="status">Status</th>
                                         <th class="text-uppercase">Action</th>
                                     </tr>
                                 </thead>
@@ -140,7 +143,7 @@
         </div><!--end col-->
     </div><!--end row-->
 <!-- Add New CATEGORY -->
-<div class="modal fade" id="add-category-modal" tabindex="-1">
+<div class="modal fade" id="new-stock-modal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0">
             <div class="modal-header p-3 bg-soft-info">
@@ -149,7 +152,7 @@
             </div>
             <div class="modal-body p-4">
                 <div class="row event-form">
-                    <input type="text" name="id" id="new-category-id" style="display: none;">
+                    <input type="text" name="id" id="new-stock-id" style="display: none;">
                     <div class="col-12"> 
                         <div class="mb-3">
                             <label class="form-label">Category</label>
@@ -221,7 +224,7 @@
                 </div><!--end row-->
                 <div class="hstack gap-2 justify-content-end">
                     <button type="button" class="btn btn-soft-danger" id="btn-delete-event"><i class="ri-close-line align-bottom"></i> Delete</button>
-                    <button class="btn btn-success" id="new-category-save">Add Category</button>
+                    <button class="btn btn-success" id="new-stock-save">Add Category</button>
                 </div>
             </div>
         </div> <!-- end modal-content-->
