@@ -39,7 +39,7 @@ function UpdateCategoryList () {
                                 <td class="unit">`+raw.unit+`</td>
                                 <td class="tax_preference">`+(raw.tax_preference?'Taxable':'None-Taxable')+`</td>
                                 <td class="hsn_code">`+raw.hsn_code+`</td>
-                                <td class="tax_rate">`+raw.tax_rate+`</td>
+                                <td class="tax_rate">`+raw.tax_rate+`%</td>
                                 <td class="status"><span class="badge badge-soft-` + badge + ` text-uppercase">` + (raw.status?'Active':'Non Active') + `</span>
                                 </td>
                                 <td>
@@ -286,40 +286,59 @@ function newCategory() {
   $('#new-category-id').val('new');
   $('#add-category-modal').modal('toggle')
 }
-$('#new-category-save').click(function() {
-    $.ajax({
-          type: "post",
-          url: api.url + "inventory/new-category",
-          data: {
-            name: $('#new-category-name').val(),
-            unit: $('#new-category-unit').val(),
-            tax_preference: $('#new-category-tax_preference').val(),
-            hsn_code: $('#new-category-hsn_code').val(),
-            tax_rate: $('#new-category-tax_rate').val(),
-            status: $('#new-category-status').val(),
-            id: $('#new-category-id').val(),
-          },
-          headers: {
-              Authorization: localStorage.getItem("token"),
-          },
-          success: function(response) {
-            if (response.success) {
-                Swal.fire({
-                  title: 'Success!',
-                  text: response.message,
-                  icon: 'success',
-                  confirmButtonText: 'O K'
-                })
-                UpdateCategoryList();
-            }
-            $('#add-category-modal').modal('hide')
-          },
-          error: function(error) {
-              error.status == 0 && (window.location.href = "/login");
-              error.status == 404 && (window.location.href = "/auth-404-basic");
-          }
-    })
+$('#new-category-close').click(function() {
+    $('#add-category-modal').modal('hide');
 })
+$('#new-category-form')[0].addEventListener('submit', function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    if ($('#new-category-form')[0].checkValidity() === true) {
+        $.ajax({
+              type: "post",
+              url: api.url + "inventory/new-category",
+              data: {
+                name: $('#new-category-name').val(),
+                unit: $('#new-category-unit').val(),
+                tax_preference: $('#new-category-tax_preference').val(),
+                hsn_code: $('#new-category-hsn_code').val(),
+                tax_rate: $('#new-category-tax_rate').val(),
+                status: $('#new-category-status').val(),
+                id: $('#new-category-id').val(),
+              },
+              headers: {
+                  Authorization: localStorage.getItem("token"),
+              },
+              success: function(response) {
+                if (response.success) {
+                    Swal.fire({
+                      title: 'Success!',
+                      text: response.message,
+                      icon: 'success',
+                      confirmButtonText: 'O K'
+                    })
+                    UpdateCategoryList();
+                }
+                $('#new-category-form')[0].classList.remove('was-validated');
+                $('#add-category-modal').modal('hide')
+              },
+              error: function(error) {
+                  error.status == 0 && (window.location.href = "/login");
+                  error.status == 404 && (window.location.href = "/auth-404-basic");
+              }
+        })
+
+
+    }
+    $('#new-category-form')[0].classList.add('was-validated');
+
+}, false);
+// $('#new-category-save').click(function() {
+//     if ($('#new-category-form').checkValidity() === false) {
+//         event.stopPropagation();
+//         event.preventDefault();
+//     }
+//     $('#new-category-form').classList.add('was-validated');
+// })
 // Delete Multiple Records
 function deleteMultiple() {
     ids_array = [];

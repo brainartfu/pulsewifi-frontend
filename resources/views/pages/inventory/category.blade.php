@@ -146,59 +146,68 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body p-4">
-                <div class="row event-form">
-                    <input type="text" name="id" id="new-category-id" style="display: none;">
-                    <div class="col-12"> 
-                        <div class="mb-3">
-                            <label class="form-label">Name</label>
-                            <input class="form-control" placeholder="Enter category name" type="text" name="title" id="new-category-name" required value="" />
-                            <div class="invalid-feedback">Please provide a valid category name</div>
-                        </div>
-                    </div><!--end col-->
-                    <div class="col-12"> 
-                        <div class="mb-3">
-                            <label class="form-label">Unit</label>
-                            <input class="form-control" placeholder="Enter category unit" type="text" name="title" id="new-category-unit" required value="" />
-                            <div class="invalid-feedback">Please provide a valid category unit</div>
-                        </div>
-                    </div><!--end col-->
-                    <div class="col-12"> 
-                        <div class="mb-3">
-                            <label class="form-label">Tax Preference</label>
-                            <select class="form-control" name="choices-single-default" id="new-category-tax_preference">
-                                <option value="1" selected>Taxable</option>
-                                <option value="0">Non-Taxable</option>
-                            </select>
-                        </div>
-                    </div><!--end col-->
-                    <div class="col-12"> 
-                        <div class="mb-3">
-                            <label class="form-label">HSN code</label>
-                            <input class="form-control" placeholder="Enter category name" type="number" name="title" id="new-category-hsn_code" required value="" />
-                            <div class="invalid-feedback">Please provide a valid HSN code</div>
-                        </div>
-                    </div><!--end col-->
-                    <div class="col-12"> 
-                        <div class="mb-3">
-                            <label class="form-label">Tax Rate</label>
-                            <input class="form-control" placeholder="Enter category name" type="number" name="title" id="new-category-tax_rate" required value="" />
-                            <div class="invalid-feedback">Please provide a valid tax rate</div>
-                        </div>
-                    </div><!--end col-->
-                    <div class="col-12"> 
-                        <div class="mb-3">
-                            <label class="form-label">Status</label>
-                            <select class="form-control" name="choices-single-default" id="new-category-status">
-                                <option value="1" selected>Active</option>
-                                <option value="0">Non-Active</option>
-                            </select>
-                        </div>
-                    </div><!--end col-->
-                </div><!--end row-->
-                <div class="hstack gap-2 justify-content-end">
-                    <button type="button" class="btn btn-soft-danger" id="btn-delete-event"><i class="ri-close-line align-bottom"></i> Delete</button>
-                    <button class="btn btn-success" id="new-category-save">Add Category</button>
-                </div>
+                <form class="row g-3" id="new-category-form" novalidate>                    
+                    <div class="row event-form">
+                        <input type="text" name="id" id="new-category-id" style="display: none;">
+                        <div class="col-12"> 
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                <input class="form-control" placeholder="Enter category name" type="text" name="title" id="new-category-name" required value="" />
+                                <div class="invalid-feedback">Please provide a valid category name</div>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-12"> 
+                            <div class="mb-3">
+                                <label class="form-label">Unit</label>
+                                <input class="form-control" placeholder="Enter category unit" type="text" name="title" id="new-category-unit" required value="" />
+                                <div class="invalid-feedback">Please provide a valid category unit</div>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-12"> 
+                            <div class="mb-3">
+                                <label class="form-label">Tax Preference</label>
+                                <select class="form-control" name="choices-single-default" id="new-category-tax_preference">
+                                    <option value="" disabled selected>Select Tax Preference</option>
+                                    <option value="1" selected>Taxable</option>
+                                    <option value="0">Non-Taxable</option>
+                                </select>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-12"> 
+                            <div class="mb-3">
+                                <label class="form-label">HSN code</label>
+                                <input class="form-control" placeholder="Enter HSN code" type="number" name="hsn_code" id="new-category-hsn_code" value="" max="99999999" />
+                                <div class="invalid-feedback">Please provide a valid HSN code. Max length is 8.</div>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-12"> 
+                            <div class="mb-3">
+                                <label class="form-label">Tax Rate</label>
+                                <div class="input-group has-validation">
+                                    <input type="number" class="form-control" id="new-category-tax_rate" max="100" 
+                                        aria-describedby="inputGroupPrepend" required>
+                                    <span class="input-group-text" id="basic-addon2">%</span>
+                                    <div class="invalid-feedback">Please provide a valid tax rate. (0 ~ 100)</div>
+                                </div>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-12"> 
+                            <div class="mb-3">
+                                <label class="form-label">Status</label>
+                                <select class="form-control" name="choices-single-default" id="new-category-status" required>
+                                    <option value="" disabled selected>Select Status</option>
+                                    <option value="1">Active</option>
+                                    <option value="0">Non-Active</option>
+                                </select>
+                                <div class="invalid-feedback">Please select a category status.</div>
+                            </div>
+                        </div><!--end col-->
+                    </div><!--end row-->
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-soft-danger" id="new-category-close"><i class="ri-close-line align-bottom"></i> Close</button>
+                        <button type="submit" class="btn btn-success" id="new-category-save">Add Category</button>
+                    </div>
+                </form>
             </div>
         </div> <!-- end modal-content-->
     </div> <!-- end modal dialog-->
