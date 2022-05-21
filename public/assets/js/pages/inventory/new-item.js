@@ -61,16 +61,21 @@ $(document).ready(function() {
 					$("#device-ean-input").val(data.ean);
 
 
-					$("#device-package_weight-input").val(data.package_weight);
-					$("#device-package_height-input").val(data.package_height);
-					$("#device-package_width-input").val(data.package_width);
-					$("#device-package_length-input").val(data.package_length);
+					$("#device-weight-input").val(data.package_weight);
+					$("#device-height-input").val(data.package_height);
+					$("#device-width-input").val(data.package_width);
+					$("#device-length-input").val(data.package_length);
 
-					$("#device-price_mrp-mrp").val(data.price_mrp);
-					$("#device-price_selling-selling").val(data.price_selling);
+					$("#device-price-mrp").val(data.price_mrp);
+					$("#device-price-selling").val(data.price_selling);
 
-					$(".device-shipping-input").val(data.shipping);
-					if (data.shipping === 'fixed') $("#device-shipping-fixed-price").val(data.fixed_price);
+					$(".device-shipping-input[value="+data.shipping+"]").attr('checked', true);
+					if (data.shipping === 'fixed') {
+						console.log('asdfasd')
+						$('#device-shipping-fixed-input')[0].style.display = 'block';
+						$('#device-shipping-fixed-price').attr('required', true);
+						$("#device-shipping-fixed-price").val(data.fixed_price);
+					}
 	        	}
 
 	        },
@@ -162,15 +167,15 @@ $(document).ready(function() {
 
 		        },
 		        error: function(error) {
-		            error.status == 0 && (window.location.href = "/login");
-		            error.status == 404 && (window.location.href = "/auth-404-basic");
+		            // error.status == 0 && (window.location.href = "/login");
+		            // error.status == 404 && (window.location.href = "/auth-404-basic");
 		        }
 			})
 		}
 		return false;
 		console.log(descriptionEditor.getData())
 	})
-	$('.form-check-input').change(function() {
+	$('.device-shipping-input').change(function() {
 		if ($(this).val() === 'fixed') {
 			$('#device-shipping-fixed-input')[0].style.display = 'block';
 			$('#device-shipping-fixed-price').attr('required', true);
@@ -182,28 +187,19 @@ $(document).ready(function() {
 	$('#add-brand-id').change(function(ele) {
 		if ($("#add-brand-id").val() === 'new') {
 			$('#add-brand-name').val('');
+			$('#add-brand-logo').val('');
+			$('#brand-delete')[0].style.display = 'none';
 		} else {
 			$('#add-brand-name').val($("#add-brand-id :selected").text());
+			$('#brand-delete')[0].style.display = 'block';
 		}
 	})
-	$('#add-brand').click(function() {
-		$('#new-brand-id').val('new');
-		$('#new-brand-name').val('');
-		$('#add-brand-modal').modal('toggle')
-	})
-
-	$('#add-brand-save').click(function() {
-		if ($('#add-brand-name').val() == '') {
-			window.alert('name require.');
-			return true;
-		}
+	$('#brand-delete').click(function() {
+		if ($('#add-brand-id').val() === 'new') return false;
 		$.ajax({
 	        type: "post",
-	        url: api.url + "inventory/add-brand",
-	        data: {
-	        	name: $('#add-brand-name').val(),
-	        	id: $('#add-brand-id').val()
-	        },
+	        url: api.url + "inventory/delete-brand",
+	        data: {id: $('#add-brand-id').val()},
 	        headers: {
 	            Authorization: localStorage.getItem("token"),
 	        },
@@ -216,6 +212,63 @@ $(document).ready(function() {
 						  icon: 'success',
 						  confirmButtonText: 'O K'
 						})
+		        	}
+	        	}
+				$('#add-brand-modal').modal('hide')
+	        },
+	        error: function(error) {
+	            error.status == 0 && (window.location.href = "/login");
+	            error.status == 404 && (window.location.href = "/auth-404-basic");
+	        }
+		})
+	})
+	$('#add-brand').click(function() {
+		$('#add-brand-id').val('new');
+		$('#add-brand-name').val('');
+		$('#add-brand-logo').val('');
+		$('#add-brand-modal').modal('toggle')
+	})
+
+	$('#add-brand-save').click(function() {
+		if ($('#add-brand-name').val() == '') {
+    		Swal.fire({
+			  text: 'Please enter the brand name.',
+			  icon: 'error',
+			  confirmButtonText: 'Ok'
+			})
+			return true;
+		}
+		if ($('#add-brand-id').val() === 'new' && !$("#add-brand-logo")[0].files[0]) {
+    		Swal.fire({
+			  text: 'Please select the brand logo.',
+			  icon: 'error',
+			  confirmButtonText: 'Ok'
+			})
+			return true;
+		}
+		let data = new FormData();
+		data.append('name', $('#add-brand-name').val());
+		data.append('id', $('#add-brand-id').val());
+		if ($("#add-brand-logo")[0].files[0]) data.append('brand_logo', $("#add-brand-logo")[0].files[0])
+		$.ajax({
+	        type: "post",
+	        url: api.url + "inventory/add-brand",
+	        data: data,				
+	        processData: false,
+			contentType: false,
+	        headers: {
+	            Authorization: localStorage.getItem("token"),
+	        },
+	        success: function(response) {
+	        	if (response.success) {
+		        	if (response.success) {
+						Swal.fire({
+						  title: 'Success!',
+						  text: response.message,
+						  icon: 'success',
+						  confirmButtonText: 'O K'
+						})
+						initpage();
 		        	}
 	        	}
 				$('#add-brand-modal').modal('hide')

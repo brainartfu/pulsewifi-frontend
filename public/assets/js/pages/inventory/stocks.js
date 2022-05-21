@@ -16,17 +16,17 @@ function init() {
 	    	const data = response.data;
 	    	console.log(data)
 	    	if (response.success) {
-				let categoryhtml = '';
+				let categoryhtml = '<option value="" selected disabled>Select Category</option>';;
 				for (var i = 0; i < data.category.length; i++) {
 					categoryhtml +=`<option value="${data.category[i]['id']}">${data.category[i]['name']}</option> `
 				}
 				$("#new-stock-category").html(categoryhtml);
-				let modelhtml = '';
+				let modelhtml = '<option value="" selected disabled>Select Model</option>';;
 				for (var i = 0; i < data.model.length; i++) {
 					modelhtml +=`<option value="${data.model[i]['id']}">${data.model[i]['name']}</option> `
 				}
 				$("#new-stock-model").html(modelhtml);
-                let brandhtml = '';
+                let brandhtml = '<option value="" selected disabled>Select Brand</option>';;
                 for (var i = 0; i < data.brand.length; i++) {
                     brandhtml +=`<option value="${data.brand[i]['id']}">${data.brand[i]['name']}</option> `
                 }
@@ -51,18 +51,23 @@ function UpdateStockList () {
                Categories = response.data;
                 Categories.forEach(function(raw) {
                     let badge;
+                    let status;
                     switch (raw.status) {
                         case 1:
                             badge = "success";
+                            status = "Active";
                             break;
                         case 2:
                             badge = "info";
+                            status = "Blocked";
                             break;
                         case 3:
                             badge = "warning";
+                            status = "Broken";
                             break;
                         case 4:
                             badge = "danger";
+                            status = "Died";
                             break;
                     }
 
@@ -83,7 +88,7 @@ function UpdateStockList () {
                                 <td class="wlan1">`+raw.wlan1+`</td>
                                 <td class="user_name">`+raw.user_name+`</td>
                                 <td class="location">`+raw.location_id+`</td>
-                                <td class="status"><span class="badge badge-soft-` + badge + ` text-uppercase">` + (raw.status?'Active':'Non Active') + `</span>
+                                <td class="status"><span class="badge badge-soft-` + badge + ` text-uppercase">` + status + `</span>
                                 </td>
                                 <td>
                                     <div class="dropdown">
@@ -155,11 +160,17 @@ const perPage = 10;
 //Table
 var options = {
     valueNames: [
+        "id",
         "name",
-        "unit",
-        "tax_preference",
-        "hsn_code",
-        "tax_rate",
+        "category_name",
+        "brand_name",
+        "model_name",
+        "mac_address",
+        "serial_num",
+        "wlan0",
+        "wlan1",
+        "user_name",
+        "location",
         "status",
     ],
     page: 10,
@@ -215,21 +226,21 @@ function initTable() {
 
 function SearchData() {
     const searchname = $('#search-name').val();
-    const searchhsn = $('#search-hsn').val();
+    const searchmodel = $('#search-model').val();
     const searchstatus = $('#search-status').val();
-
+        console.log(searchstatus, searchmodel, searchname)
     StockList.filter(function(data) {
+        console.log(data.values())
         matchData = new DOMParser().parseFromString(
             data.values().status,
             "text/html"
         );
         const filter = true;
         let status = matchData.body.firstElementChild.innerHTML;
-        status = status==='Active'?1:0;
         if (searchname && searchname !== data.values().name) {
             return false
         }   
-        if (searchhsn && searchhsn !== data.values().hsn_code) {
+        if (searchmodel && searchmodel !== data.values().model_name) {
             return false
         }
         if (searchstatus !== '' && searchstatus*1 !== status) {
@@ -314,9 +325,10 @@ function EditStock(data) {
     console.log(editData)
     $('#new-stock-id').val(id);
     $('#new-stock-category').val(editData[0]['category']);
+    $('#new-stock-name').val(editData[0]['name']);
     $('#new-stock-brand').val(editData[0]['brand']);
     $('#new-stock-model').val(editData[0]['model_id']);
-    $('#new-stock-mac').val(editData[0]['mac']);
+    $('#new-stock-mac').val(editData[0]['mac_address']);
     $('#new-stock-serial').val(editData[0]['serial_num']);
     $('#new-stock-wlan0').val(editData[0]['wlan0']);
     $('#new-stock-wlan1').val(editData[0]['wlan1']);
@@ -327,9 +339,10 @@ function EditStock(data) {
 
 function newStock() {
   $('#new-stock-id').val('');
-  // $('#new-stock-category').val('');
-  // $('#new-stock-brand').val('');
-  // $('#new-stock-model').val('');
+  $('#new-stock-name').val('');
+  $('#new-stock-category').val('');
+  $('#new-stock-brand').val('');
+  $('#new-stock-model').val('');
   $('#new-stock-mac').val('');
   $('#new-stock-serial').val('');
   $('#new-stock-wlan0').val('');
@@ -338,13 +351,25 @@ function newStock() {
   $('#new-stock-status').val('1');
   $("#new-stock-modal").modal('show');
 }
-$('#new-stock-save').click(function() {
+$('#new-stock-close').click(function(event) {
+    $('#new-stock-modal').modal('hide')
+})
+$('#new-stock-save').click(function(event) {
+    $('#new-stock-form')[0].classList.add('was-validated');
+
+    event.preventDefault();
+    event.stopPropagation();
+    if ($('#new-stock-form')[0].checkValidity() === false) {
+        return false;
+    }
+
     $.ajax({
           type: "post",
           url: api.url + "inventory/new-stock",
           data: {
             id: $('#new-stock-id').val(),
             category: $('#new-stock-category').val(),
+            name: $('#new-stock-name').val(),
             brand: $('#new-stock-brand').val(),
             model_id: $('#new-stock-model').val(),
             mac_address: $('#new-stock-mac').val(),
@@ -367,7 +392,7 @@ $('#new-stock-save').click(function() {
                 })
                 UpdateStockList();
             }
-            $('#add-stock-modal').modal('hide')
+            $('#new-stock-modal').modal('hide')
           },
           error: function(error) {
               error.status == 0 && (window.location.href = "/login");
@@ -375,6 +400,21 @@ $('#new-stock-save').click(function() {
           }
     })
 })
+new Cleave('.mac-mask1', {
+    delimiter: ':',
+    blocks: [2,2,2,2,2,2],
+    uppercase: true
+});
+new Cleave('.mac-mask2', {
+    delimiter: ':',
+    blocks: [2,2,2,2,2,2],
+    uppercase: true
+});
+new Cleave('.mac-mask3', {
+    delimiter: ':',
+    blocks: [2,2,2,2,2,2],
+    uppercase: true
+});
 // Delete Multiple Records
 function deleteMultiple() {
     ids_array = [];

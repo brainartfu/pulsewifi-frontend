@@ -24,7 +24,7 @@
                         <div class="row g-3">
                             <div class="col-xxl-3 col-sm-4">
                                 <div class="search-box">
-                                    <input type="text" class="form-control search  bg-light border-light" id="search-name"
+                                    <input type="text" class="form-control bg-light border-light" id="search-name"
                                         placeholder="Search for name...">
                                     <i class="ri-search-line search-icon"></i>
                                 </div>
@@ -32,7 +32,7 @@
                             <!--end col-->
                             <div class="col-xxl-3 col-sm-3">
                                 <div class="search-box">
-                                    <input type="number" class="form-control  bg-light border-light" id="search-hsn" 
+                                    <input type="test" class="form-control  bg-light border-light" id="search-model" 
                                         placeholder="Search for model...">
                                     <i class="ri-search-line search-icon"></i>
                                 </div>
@@ -42,10 +42,10 @@
                                 <div class="input-light">
                                     <select class="form-control" name="choices-single-default"  id="search-status">
                                         <option value="" selected>Status</option>
-                                        <option value="1">Active</option>
-                                        <option value="2">Blocked</option>
-                                        <option value="3">Broken</option>
-                                        <option value="4">Died</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Blocked">Blocked</option>
+                                        <option value="Broken">Broken</option>
+                                        <option value="Died">Died</option>
                                     </select>
                                 </div>
                             </div>
@@ -151,81 +151,92 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body p-4">
-                <div class="row event-form">
-                    <input type="text" name="id" id="new-stock-id" style="display: none;">
-                    <div class="col-12"> 
-                        <div class="mb-3">
-                            <label class="form-label">Category</label>
-                            <select class="form-control" name="choices-single-default" id="new-stock-category">
-                            </select>
-                        </div>
-                    </div><!--end col-->
-                    <div class="col-12"> 
-                        <div class="mb-3">
-                            <label class="form-label">Brand</label>
-                            <select class="form-control" name="choices-single-default" id="new-stock-brand">
-                            </select>
-                        </div>
-                    </div><!--end col-->
-                    <div class="col-12"> 
-                        <div class="mb-3">
-                            <label class="form-label">Model</label>
-                            <select class="form-control" name="choices-single-default" id="new-stock-model">
-                            </select>
-                        </div>
-                    </div><!--end col-->
-                    <div class="col-12"> 
-                        <div class="mb-3">
-                            <label class="form-label">MAC</label>
-                            <input class="form-control" placeholder="Enter MAC..." type="text" name="title" id="new-stock-mac"/>
-                            <div class="invalid-feedback">Please provide a valid MAC</div>
-                        </div>
-                    </div><!--end col-->
-                    <div class="col-12"> 
-                        <div class="mb-3">
-                            <label class="form-label">Serial No</label>
-                            <input class="form-control" placeholder="Enter MAC..." type="number" name="title" id="new-stock-serial"/>
-                        </div>
-                    </div><!--end col-->
-                    <div class="col-12"> 
-                        <div class="mb-3">
-                            <label class="form-label">WLAN0 MAC</label>
-                            <input class="form-control" placeholder="Enter MAC..." type="text" name="title" id="new-stock-wlan0"/>
-                            <div class="invalid-feedback">Please provide a valid MAC...</div>
-                        </div>
-                    </div><!--end col-->
-                    <div class="col-12"> 
-                        <div class="mb-3">
-                            <label class="form-label">WLAN1 MAC</label>
-                            <input class="form-control" placeholder="Enter MAC..." type="text" name="title" id="new-stock-wlan1"/>
-                            <div class="invalid-feedback">Please provide a valid MAC...</div>
-                        </div>
-                    </div><!--end col-->
-                    <div class="col-12"> 
-                        <div class="mb-3">
-                            <label class="form-label">IS CONFIGURED</label>
-                            <select class="form-control" name="choices-single-default" id="new-stock-configure">
-                                <option value="1" selected>Configure</option>
-                                <option value="0">Not Configure</option>
-                            </select>
-                        </div>
-                    </div><!--end col-->
-                    <div class="col-12"> 
-                        <div class="mb-3">
-                            <label class="form-label">Device Status</label>
-                            <select class="form-control" name="choices-single-default" id="new-stock-status">
-                                <option value="1">Active</option>
-                                <option value="2">Blocked</option>
-                                <option value="3">Broken</option>
-                                <option value="4">Died</option>
-                            </select>
-                        </div>
-                    </div><!--end col-->
-                </div><!--end row-->
-                <div class="hstack gap-2 justify-content-end">
-                    <button type="button" class="btn btn-soft-danger" id="btn-delete-event"><i class="ri-close-line align-bottom"></i> Delete</button>
-                    <button class="btn btn-success" id="new-stock-save">Add Category</button>
-                </div>
+                <form class="row g-3" id="new-stock-form" novalidate>                    
+                    <div class="row event-form">
+
+                        <input type="text" name="id" id="new-stock-id" style="display: none;">
+                        <div class="col-12"> 
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                <input class="form-control" placeholder="Enter Name..." type="text" name="name" id="new-stock-name" required />
+                                <div class="invalid-feedback">Please enter name</div>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-12"> 
+                            <div class="mb-3">
+                                <label class="form-label">Category</label>
+                                <select class="form-control" name="choices-single-default" id="new-stock-category" required>
+                                </select>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-12"> 
+                            <div class="mb-3">
+                                <label class="form-label">Brand</label>
+                                <select class="form-control" name="choices-single-default" id="new-stock-brand" required>
+                                </select>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-12"> 
+                            <div class="mb-3">
+                                <label class="form-label">Model</label>
+                                <select class="form-control" name="choices-single-default" id="new-stock-model" required>
+                                </select>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-12"> 
+                            <div class="mb-3">
+                                <label class="form-label">MAC</label>
+                                <input class="form-control mac-mask1" placeholder="Enter MAC..." type="text" name="mac" id="new-stock-mac" required />
+                                <div class="invalid-feedback">Please provide a valid MAC</div>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-12"> 
+                            <div class="mb-3">
+                                <label class="form-label">Serial No</label>
+                                <input class="form-control" placeholder="Enter MAC..." type="number" name="serial_num" id="new-stock-serial" required />
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-12"> 
+                            <div class="mb-3">
+                                <label class="form-label">WLAN0 MAC</label>
+                                <input class="form-control mac-mask2" placeholder="Enter MAC..." type="text" name="wlan0_mac" id="new-stock-wlan0" required />
+                                <div class="invalid-feedback">Please provide a valid MAC...</div>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-12"> 
+                            <div class="mb-3">
+                                <label class="form-label">WLAN1 MAC</label>
+                                <input class="form-control mac-mask3" placeholder="Enter MAC..." type="text" name="wlan1_mac" id="new-stock-wlan1" required />
+                                <div class="invalid-feedback">Please provide a valid MAC...</div>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-12"> 
+                            <div class="mb-3">
+                                <label class="form-label">IS CONFIGURED</label>
+                                <select class="form-control" name="configure" id="new-stock-configure">
+                                    <option value="1" selected>Configure</option>
+                                    <option value="0">Not Configure</option>
+                                </select>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-12"> 
+                            <div class="mb-3">
+                                <label class="form-label">Device Status</label>
+                                <select class="form-control" name="status" id="new-stock-status" required >
+                                    <option value="" selected disabled>Select Device Status</option>
+                                    <option value="1">Active</option>
+                                    <option value="2">Blocked</option>
+                                    <option value="3">Broken</option>
+                                    <option value="4">Died</option>
+                                </select>
+                            </div>
+                        </div><!--end col-->
+                    </div><!--end row-->
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-soft-danger" id="new-stock-close"><i class="ri-close-line align-bottom"></i> Close</button>
+                        <button class="btn btn-success" id="new-stock-save">Add Stock</button>
+                    </div>
+                </form>
             </div>
         </div> <!-- end modal-content-->
     </div> <!-- end modal dialog-->
@@ -233,7 +244,9 @@
 @endsection
 @section('script')
     <script src="{{ URL::asset('assets/libs/list.js/list.js.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/libs/list.pagination.js/list.pagination.js.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/libs/list.pagination.js/list.pagination.js.min.js') }}"></script>    
+    <script src="{{ URL::asset('assets/libs/cleave.js/cleave.js.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/js/pages/form-masks.init.js') }}"></script>
     <script src="{{ URL::asset('assets/js/pages/inventory/stocks.js') }}"></script>
     <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>

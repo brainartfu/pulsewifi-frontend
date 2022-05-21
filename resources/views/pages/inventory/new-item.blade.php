@@ -246,9 +246,15 @@
                             <div class="invalid-feedback">Please provide a valid brand name</div>
                         </div>
                     </div><!--end col-->
+                    <div class="col-12">
+                        <div class="mb-3">
+                            <label class="form-label" for="project-thumbnail-img">Logo</label>
+                            <input class="form-control" id="add-brand-logo" type="file" accept="image/png, image/gif, image/jpeg" required>
+                        </div>
+                    </div><!--end col-->
                 </div><!--end row-->
                 <div class="hstack gap-2 justify-content-end">
-                    <button type="button" class="btn btn-soft-danger" id="btn-delete-event"><i class="ri-close-line align-bottom"></i> Delete</button>
+                    <button type="button" class="btn btn-soft-danger" id="brand-delete" style="display: none;"><i class="ri-close-line align-bottom"></i> Delete</button>
                     <button  class="btn btn-success" id="add-brand-save">Add Brand</button>
                 </div>
             </div>

@@ -24,7 +24,7 @@
                         <div class="row g-3">
                             <div class="col-xxl-3 col-sm-4">
                                 <div class="search-box">
-                                    <input type="text" class="form-control  bg-light border-light" id="search-name"
+                                    <input type="text" class="form-control search  bg-light border-light" id="search-name"
                                         placeholder="Search for name...">
                                     <i class="ri-search-line search-icon"></i>
                                 </div>

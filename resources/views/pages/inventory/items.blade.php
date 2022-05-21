@@ -73,13 +73,13 @@
                                         <th class="sort text-uppercase" data-sort="name">Category</th>
                                         <th class="sort text-uppercase" data-sort="unit">
                                             Name</th>
-                                        <th class="sort text-uppercase" data-sort="tax_preference">BRAND LOGO</th>
-                                        <th class="sort text-uppercase" data-sort="hsn_code">Model</th>
-                                        <th class="sort text-uppercase" data-sort="tax_rate">H/W VERSION</th>
-                                        <th class="sort text-uppercase" data-sort="status">
+                                        <th class="sort text-uppercase" data-sort="brand-logo">BRAND LOGO</th>
+                                        <th class="sort text-uppercase" data-sort="model">Model</th>
+                                        <th class="sort text-uppercase" data-sort="hardware_version">H/W VERSION</th>
+                                        <th class="sort text-uppercase" data-sort="stocks">
                                             Stocks</th>
-                                        <th class="sort text-uppercase" data-sort="tax_rate">Created</th>
-                                        <th class="sort text-uppercase" data-sort="tax_rate">Status</th>
+                                        <th class="sort text-uppercase" data-sort="created_at">Created</th>
+                                        <th class="sort text-uppercase" data-sort="status">Status</th>
                                         <th class="text-uppercase">Action</th>
                                     </tr>
                                 </thead>

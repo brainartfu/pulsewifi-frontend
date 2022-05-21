@@ -1,13 +1,4 @@
 
-var Categories = [{
-    id: 5,
-    name: 'test1',
-    unit: '123',
-    tax_preference: '1',
-    hsn_code: "1232",
-    tax_rate: 123,
-    status: '0',
-}];
 function UpdateItemsList () {
     $.ajax({
         type: "post",
@@ -17,8 +8,8 @@ function UpdateItemsList () {
             console.log(data)
             if (response.success) {
                document.getElementById('category-list-data').innerHTML = '';
-               Categories = response.data;
-                Categories.forEach(function(raw) {
+               Items = response.data;
+                Items.forEach(function(raw) {
                     let badge;
                     switch (raw.status) {
                         case 1:
@@ -37,11 +28,11 @@ function UpdateItemsList () {
                                 <td class="id"  style="display: none;">`+raw.id+`</td>
                                 <td class="category">`+raw.cName+`</td>
                                 <td class="name">` + raw.name + `</td>
-                                <td class="unit">`+raw.brand+`</td>
-                                <td class="tax_preference">`+raw.model+`</td>
-                                <td class="hsn_code">`+raw.hardware_version+`</td>
-                                <td class="tax_rate">`+raw.stocks+`</td>
-                                <td class="tax_rate">`+raw.created_at.split('T')[0]+`</td>
+                                <td class="brand_logo" style="padding: 2px"><img src="${api.domain+raw.brand_logo}" height="45" alt="logo" /></td>
+                                <td class="model">`+raw.model+`</td>
+                                <td class="hardware_version">`+raw.hardware_version+`</td>
+                                <td class="stocks">`+raw.stocks+`</td>
+                                <td class="created_at">`+raw.created_at.split('T')[0]+`</td>
                                 <td class="status"><span class="badge badge-soft-` + badge + ` text-uppercase">` + (raw.status?'Published':'Hidden') + `</span>
                                 </td>
                                 <td>
@@ -113,12 +104,15 @@ const perPage = 10;
 //Table
 var options = {
     valueNames: [
+        "id",
+        "category",
         "name",
-        "unit",
-        "tax_preference",
-        "hsn_code",
-        "tax_rate",
-        "status",
+        "brand_logo",
+        "model",
+        "hardware_version",
+        "stocks",
+        "created_at",
+        "status"
     ],
     page: 10,
     pagination: true,
@@ -177,13 +171,14 @@ function SearchData() {
     const searchstatus = $('#search-status').val();
 
     ItemList.filter(function(data) {
+        console.log(data.values())
         matchData = new DOMParser().parseFromString(
             data.values().status,
             "text/html"
         );
         const filter = true;
         let status = matchData.body.firstElementChild.innerHTML;
-        status = status==='Active'?1:0;
+        status = status==='Published'?1:0;
         if (searchname && searchname !== data.values().name) {
             return false
         }   
