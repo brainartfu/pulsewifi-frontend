@@ -61,7 +61,7 @@
                 </div>
                 <div class="card-body">
                     <div>
-                        <div class="table-responsive table-card">
+                        <div class="table-responsive table-card" style="min-height: 40vh;">
                             <table class="table align-middle table-nowrap" id="CategoryTable">
                                 <thead class="text-muted">
                                     <tr>
@@ -76,15 +76,16 @@
                                         <th class="sort text-uppercase" data-sort="brand-logo">BRAND LOGO</th>
                                         <th class="sort text-uppercase" data-sort="model">Model</th>
                                         <th class="sort text-uppercase" data-sort="hardware_version">H/W VERSION</th>
-                                        <th class="sort text-uppercase" data-sort="stocks">
-                                            Stocks</th>
+                                        <!-- <th class="sort text-uppercase" data-sort="stocks"> Stocks</th> -->
                                         <th class="sort text-uppercase" data-sort="created_at">Created</th>
                                         <th class="sort text-uppercase" data-sort="status">Status</th>
                                         <th class="text-uppercase">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all" id="category-list-data">
-
+                                    <tr>
+                                        <td colspan="12" style="text-align: center;"><span class="spinner-border flex-shrink-0" role="status"></span></td>
+                                    </tr>
                                 </tbody>
                             </table>
                             <div class="noresult" style="display: none">
@@ -94,7 +95,7 @@
                                     </lord-icon>
                                     <h5 class="mt-2">Sorry! No Result Found</h5>
                                     <p class="text-muted mb-0">We did not find any
-                                        invoices for you search.</p>
+                                        item for you search.</p>
                                 </div>
                             </div>
                         </div>
@@ -112,7 +113,7 @@
                     </div>
 
                     <!-- Modal -->
-                    <div class="modal fade flip" id="deleteOrder" tabindex="-1" aria-labelledby="deleteOrderLabel"
+                    <div class="modal fade flip" id="deleteItem" tabindex="-1" aria-labelledby="deleteOrderLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -121,12 +122,12 @@
                                         colors="primary:#25a0e2,secondary:#00bd9d" style="width:90px;height:90px">
                                     </lord-icon>
                                     <div class="mt-4 text-center">
-                                        <h4>You are about to delete a invoice ?</h4>
-                                        <p class="text-muted fs-15 mb-4">Deleting your invoice will remove all of
+                                        <h4>You are about to delete a item ?</h4>
+                                        <p class="text-muted fs-15 mb-4">Deleting your item will remove all of
                                             your information from our database.</p>
                                         <div class="hstack gap-2 justify-content-center remove">
                                             <button class="btn btn-link link-primary fw-medium text-decoration-none" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</button>
-                                            <button class="btn btn-primary" id="delete-record">Yes, Delete It</button>
+                                            <button class="btn btn-primary" id="delete-item-btn">Yes, Delete It</button>
                                         </div>
                                     </div>
                                 </div>

@@ -40,7 +40,7 @@ function UpdateCategoryList () {
                                 <td class="tax_preference">`+(raw.tax_preference?'Taxable':'None-Taxable')+`</td>
                                 <td class="hsn_code">`+raw.hsn_code+`</td>
                                 <td class="tax_rate">`+raw.tax_rate+`%</td>
-                                <td class="status"><span class="badge badge-soft-` + badge + ` text-uppercase">` + (raw.status?'Active':'Non Active') + `</span>
+                                <td class="status"><span class="badge badge-soft-` + badge + ` text-uppercase">` + (raw.status?'Active':'Inactive') + `</span>
                                 </td>
                                 <td>
                                     <div class="dropdown">
@@ -116,7 +116,7 @@ var options = {
         "tax_preference",
         "hsn_code",
         "tax_rate",
-        "status",
+        "status"
     ],
     page: 10,
     pagination: true,
@@ -169,11 +169,9 @@ function initTable() {
     
 }
 
-function SearchData() {
-    const searchname = $('#search-name').val();
-    const searchhsn = $('#search-hsn').val();
-    const searchstatus = $('#search-status').val();
-
+$('#search-status').change(function() {
+    console.log($(this))
+    const searchstatus = $(this).val();
     CategoryList.filter(function(data) {
         matchData = new DOMParser().parseFromString(
             data.values().status,
@@ -182,20 +180,16 @@ function SearchData() {
         const filter = true;
         let status = matchData.body.firstElementChild.innerHTML;
         status = status==='Active'?1:0;
-        if (searchname && searchname !== data.values().name) {
-            return false
-        }   
-        if (searchhsn && searchhsn !== data.values().hsn_code) {
-            return false
-        }
         if (searchstatus !== '' && searchstatus*1 !== status) {
             return false
         }
         return true;
     });
     CategoryList.update();
-}
-
+})
+$('#new-category-tax_rate').keyup(function() {
+    if ($(this).val() > 100) $(this).val(100);
+})
 function ischeckboxcheck() {
     document.getElementsByName("checkAll").forEach(function(x) {
         x.addEventListener("click", function(e) {
@@ -226,19 +220,24 @@ document.querySelector(".pagination-prev").addEventListener("click", function() 
         document.querySelector(".pagination.listjs-pagination").querySelector(".active").previousSibling.children[0].click() : "" : "";
 });
 
+let deleteIds = [];
 
 function DeleteCategory(data, multi = false) {
-    const ids = multi?data:[data.getAttribute('data-id')];
-    if (confirm('Are you sure you want to delete this?')) {
+    deleteIds = multi?data:[data.getAttribute('data-id')];
+    $('#deleteCategory').modal('show');
+}
+$('#delete-category-btn').click(function() {
+    if (deleteIds.length > 0) {
       $.ajax({
         type: "post",
         url: api.url + "inventory/delete-category",
-        data: {ids:ids},
+        data: {ids:deleteIds},
         headers: {
             Authorization: localStorage.getItem("token"),
         },
         success: function(response) {
           if (response.success) {
+            $('#deleteCategory').modal('hide');
             if (response.success) {
                 Swal.fire({
                     title: 'Success!',
@@ -247,11 +246,19 @@ function DeleteCategory(data, multi = false) {
                     confirmButtonText: 'O K'
                 })
 
-                ids.forEach(function(id) {
+                deleteIds.forEach(function(id) {
                     CategoryList.remove("id", id);
                 });
+                deleteIds = [];
                 document.getElementById('checkAll').checked = false;
                 UpdateCategoryList(true);
+            } else {
+                Swal.fire({
+                    title: 'Failure!',
+                    text: 'Failure the delete category.',
+                    icon: 'error',
+                    confirmButtonText: 'O K'
+                })
             }
           }
         },
@@ -260,10 +267,9 @@ function DeleteCategory(data, multi = false) {
             // error.status == 404 && (window.location.href = "/auth-404-basic");
         }
       })
-    } else {
-      return false;
     }
-}
+})
+
 function EditCateogry(data) {
     const id = data.getAttribute('data-id');
     const editData = Categories.filter((obj)=>obj.id==id);
@@ -275,6 +281,8 @@ function EditCateogry(data) {
     $('#new-category-tax_rate').val(editData[0].tax_rate);
     $('#new-category-status').val(editData[0].status);
     $('#new-category-id').val(id);
+    $('#new-category-save').html('Update');
+    $('#category-modal-title').html('Update Category');
     $('#add-category-modal').modal('toggle');
 }
 
@@ -284,6 +292,8 @@ function newCategory() {
   $('#new-category-hsn_code').val('');
   $('#new-category-tax_rate').val('');
   $('#new-category-id').val('new');
+    $('#new-category-save').html('Add');
+    $('#category-modal-title').html('New Category');
   $('#add-category-modal').modal('toggle')
 }
 $('#new-category-close').click(function() {

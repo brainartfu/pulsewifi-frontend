@@ -195,7 +195,7 @@
                                         <input type="text" class="form-control" id="device-ean-input" placeholder="Enter EAN" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="choices-priority-input" class="form-label">brand</label>
+                                        <label for="choices-priority-input" class="form-label">Brand</label>
                                         <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="add-brand" style="height: 22px;">
                                             <i class="bx bx-plus-medical fs-22"></i>
                                         </button>
@@ -203,12 +203,20 @@
                                         </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="choices-status-input" class="form-label">Model</label>
+                                        <label for="device-model-input" class="form-label">Model</label>
                                         <input type="text" class="form-control" id="device-model-input" placeholder="Enter Brand" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="datepicker-deadline-input" class="form-label">hardware_version</label>
+                                        <label for="device-version-input" class="form-label">Hardware Version</label>
                                         <input type="text" class="form-control" id="device-version-input" placeholder="Enter hardware version" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="device-status-input" class="form-label">Status</label>
+                                        <select class="form-select" id="device-status-input" required>
+                                            <option value="" selected disabled>Select status</option>
+                                            <option value="1">Published</option>
+                                            <option value="0">Hidden</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <!-- end card body -->

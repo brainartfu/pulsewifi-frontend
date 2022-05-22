@@ -68,6 +68,7 @@ $(document).ready(function() {
 
 					$("#device-price-mrp").val(data.price_mrp);
 					$("#device-price-selling").val(data.price_selling);
+					$("#device-status-input").val(data.status);
 
 					$(".device-shipping-input[value="+data.shipping+"]").attr('checked', true);
 					if (data.shipping === 'fixed') {
@@ -122,6 +123,7 @@ $(document).ready(function() {
 				price_selling: $("#device-price-selling").val() || '',
 
 				shipping: $(".device-shipping-input").val() || '',
+				status: $(".device-status-input").val() || '',
 			}
 			if (data.shipping === 'fixed') {
 				data.fixed_price = $("#device-shipping-fixed-price").val()
@@ -152,6 +154,25 @@ $(document).ready(function() {
 							  confirmButtonText: 'O K'
 							})
 			        	}	        		
+					    $('#new-item-form')[0].classList.remove('was-validated');
+						$("#device-name-input").val('');
+						$('#device-photo-input').val('');
+						descriptionEditor.setData('');
+						$("#device-brand-input").val('');
+						$("#device-model-input").val('');
+						$("#device-version-input").val('');
+						$("#device-category-input").val('');
+						$("#device-ean-input").val('');
+
+						$("#device-weight-input").val('');
+						$("#device-height-input").val('');
+						$("#device-width-input").val('');
+						$("#device-length-input").val('');
+
+						$("#device-price-mrp").val('');
+						$("#device-price-selling").val('');
+						$("#device-status-input").val('');
+						$("#device-shipping-fixed-price").val('');
 		        	} else {
 		        		let message = '';
 		        		for (let key in response.data) {

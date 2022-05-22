@@ -30,30 +30,25 @@
                                 </div>
                             </div>
                             <!--end col-->
-                            <div class="col-xxl-3 col-sm-3">
-                                <div class="search-box">
-                                    <input type="number" class="form-control  bg-light border-light" id="search-hsn" 
-                                        placeholder="Search for HSN code...">
-                                    <i class="ri-search-line search-icon"></i>
-                                </div>
+                            <div class="col-xxl-4 col-sm-5">
                             </div>
                             <!--end col-->
                             <div class="col-xxl-3 col-sm-3">
                                 <div class="input-light">
                                     <select class="form-control" name="choices-single-default"  id="search-status">
-                                        <option value="" selected>Status</option>
+                                        <option value="" selected>All</option>
                                         <option value="1">Active</option>
-                                        <option value="0">Non-Active</option>
+                                        <option value="0">Inactive</option>
                                     </select>
                                 </div>
                             </div>
                             <!--end col-->
 
-                            <div class="col-xxl-1 col-sm-2">
+                           <!--  <div class="col-xxl-1 col-sm-2">
                                 <button type="button" class="btn btn-primary w-100" onclick="SearchData();">
                                     <i class="ri-equalizer-fill me-1 align-bottom"></i> Filters
                                 </button>
-                            </div>
+                            </div> -->
                             <!--end col-->
                         </div>
                         <!--end row-->
@@ -61,7 +56,7 @@
                 </div>
                 <div class="card-body">
                     <div>
-                        <div class="table-responsive table-card">
+                        <div class="table-responsive table-card" style="min-height: 40vh;">
                             <table class="table align-middle table-nowrap" id="CategoryTable">
                                 <thead class="text-muted">
                                     <tr>
@@ -82,7 +77,9 @@
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all" id="category-list-data">
-
+                                    <tr>
+                                        <td colspan="12" style="text-align: center;"><span class="spinner-border flex-shrink-0" role="status"></span></td>
+                                    </tr>
                                 </tbody>
                             </table>
                             <div class="noresult" style="display: none">
@@ -92,7 +89,7 @@
                                     </lord-icon>
                                     <h5 class="mt-2">Sorry! No Result Found</h5>
                                     <p class="text-muted mb-0">We did not find any
-                                        invoices for you search.</p>
+                                        category for you search.</p>
                                 </div>
                             </div>
                         </div>
@@ -110,7 +107,7 @@
                     </div>
 
                     <!-- Modal -->
-                    <div class="modal fade flip" id="deleteOrder" tabindex="-1" aria-labelledby="deleteOrderLabel"
+                    <div class="modal fade flip" id="deleteCategory" tabindex="-1" aria-labelledby="deleteCategoryLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -119,12 +116,12 @@
                                         colors="primary:#25a0e2,secondary:#00bd9d" style="width:90px;height:90px">
                                     </lord-icon>
                                     <div class="mt-4 text-center">
-                                        <h4>You are about to delete a invoice ?</h4>
-                                        <p class="text-muted fs-15 mb-4">Deleting your invoice will remove all of
+                                        <h4>You are about to delete a category ?</h4>
+                                        <p class="text-muted fs-15 mb-4">Deleting your category will remove all of
                                             your information from our database.</p>
                                         <div class="hstack gap-2 justify-content-center remove">
                                             <button class="btn btn-link link-primary fw-medium text-decoration-none" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</button>
-                                            <button class="btn btn-primary" id="delete-record">Yes, Delete It</button>
+                                            <button class="btn btn-primary" id="delete-category-btn">Yes, Delete It</button>
                                         </div>
                                     </div>
                                 </div>
@@ -142,7 +139,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0">
             <div class="modal-header p-3 bg-soft-info">
-                <h5 class="modal-title" id="modal-title">Add Category</h5>
+                <h5 class="modal-title" id="category-modal-title">Add Category</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body p-4">
@@ -197,7 +194,7 @@
                                 <select class="form-control" name="choices-single-default" id="new-category-status" required>
                                     <option value="" disabled selected>Select Status</option>
                                     <option value="1">Active</option>
-                                    <option value="0">Non-Active</option>
+                                    <option value="0">Inactive</option>
                                 </select>
                                 <div class="invalid-feedback">Please select a category status.</div>
                             </div>

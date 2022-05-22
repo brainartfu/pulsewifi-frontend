@@ -28,10 +28,10 @@ function UpdateItemsList () {
                                 <td class="id"  style="display: none;">`+raw.id+`</td>
                                 <td class="category">`+raw.cName+`</td>
                                 <td class="name">` + raw.name + `</td>
-                                <td class="brand_logo" style="padding: 2px"><img src="${api.domain+raw.brand_logo}" height="45" alt="logo" /></td>
+                                <td class="brand_logo" style="padding: 2px"><img src="${api.domain+raw.brand_logo}" alt="logo" style="max-width: 100px; max-height: 25px;" /></td>
                                 <td class="model">`+raw.model+`</td>
                                 <td class="hardware_version">`+raw.hardware_version+`</td>
-                                <td class="stocks">`+raw.stocks+`</td>
+                              
                                 <td class="created_at">`+raw.created_at.split('T')[0]+`</td>
                                 <td class="status"><span class="badge badge-soft-` + badge + ` text-uppercase">` + (raw.status?'Published':'Hidden') + `</span>
                                 </td>
@@ -45,7 +45,7 @@ function UpdateItemsList () {
                                                     Edit</button></a></li>
                                             <li class="dropdown-divider"></li>
                                             <li>
-                                                <a class="dropdown-item remove-item-btn" data-bs-toggle="modal"  href="javascript:void(0);" onclick="DeleteCategory(this)" data-id="`+raw.id+`">
+                                                <a class="dropdown-item remove-item-btn" data-bs-toggle="modal"  href="javascript:void(0);" onclick="DeleteItem(this)" data-id="`+raw.id+`">
                                                     <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
                                                     Delete
                                                 </a>
@@ -127,7 +127,6 @@ var options = {
 // Init list
 let ItemList = {};
 function initTable() {
-    console.log('init')
         ItemList = new List("ItemList", options).on(
             "updated",
             function(list) {
@@ -223,19 +222,23 @@ document.querySelector(".pagination-prev").addEventListener("click", function() 
         document.querySelector(".pagination.listjs-pagination").querySelector(".active").previousSibling.children[0].click() : "" : "";
 });
 
-
-function DeleteCategory(data, multi = false) {
-    const ids = multi?data:[data.getAttribute('data-id')];
-    if (confirm('Are you sure you want to delete this?')) {
+let deleteIds = [];
+function DeleteItem(data, multi = false) {
+    deleteIds = multi?data:[data.getAttribute('data-id')];
+    $('#deleteItem').modal('show');
+}
+$('#delete-item-btn').click(function() {
+    if (deleteIds.length > 0) {
       $.ajax({
         type: "post",
         url: api.url + "inventory/delete-item",
-        data: {ids:ids},
+        data: {ids:deleteIds},
         headers: {
             Authorization: localStorage.getItem("token"),
         },
         success: function(response) {
           if (response.success) {
+            $('#deleteItem').modal('hide');
             if (response.success) {
                 Swal.fire({
                     title: 'Success!',
@@ -244,11 +247,19 @@ function DeleteCategory(data, multi = false) {
                     confirmButtonText: 'O K'
                 })
 
-                ids.forEach(function(id) {
+                deleteIds.forEach(function(id) {
                     ItemList.remove("id", id);
                 });
+                deleteIds = [];
                 document.getElementById('checkAll').checked = false;
                 UpdateItemsList(true);
+            } else {
+                Swal.fire({
+                    title: 'Failure!',
+                    text: 'Failure the delete item',
+                    icon: 'error',
+                    confirmButtonText: 'O K'
+                })
             }
           }
         },
@@ -257,10 +268,9 @@ function DeleteCategory(data, multi = false) {
             // error.status == 404 && (window.location.href = "/auth-404-basic");
         }
       })
-    } else {
-      return false;
     }
-}
+})
+
 // Delete Multiple Records
 function deleteMultiple() {
     ids_array = [];
@@ -272,7 +282,7 @@ function deleteMultiple() {
     });
 
     if (typeof ids_array !== 'undefined' && ids_array.length > 0) {
-        DeleteCategory(ids_array, true);
+        DeleteItem(ids_array, true);
     } else {
         Swal.fire({
             title: 'Please select at least one checkbox',

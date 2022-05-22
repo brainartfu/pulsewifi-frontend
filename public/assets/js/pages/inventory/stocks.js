@@ -23,7 +23,7 @@ function init() {
 				$("#new-stock-category").html(categoryhtml);
 				let modelhtml = '<option value="" selected disabled>Select Model</option>';;
 				for (var i = 0; i < data.model.length; i++) {
-					modelhtml +=`<option value="${data.model[i]['id']}">${data.model[i]['name']}</option> `
+					modelhtml +=`<option value="${data.model[i]['id']}" class="category-${data.model[i]['category']}">${data.model[i]['name']}</option> `
 				}
 				$("#new-stock-model").html(modelhtml);
                 let brandhtml = '<option value="" selected disabled>Select Brand</option>';;
@@ -51,7 +51,7 @@ function UpdateStockList () {
                Categories = response.data;
                 Categories.forEach(function(raw) {
                     let badge;
-                    let status;
+                    let status = '';
                     switch (raw.status) {
                         case 1:
                             badge = "success";
@@ -65,22 +65,20 @@ function UpdateStockList () {
                             badge = "warning";
                             status = "Broken";
                             break;
-                        case 4:
+                        default:
                             badge = "danger";
                             status = "Died";
-                            break;
                     }
 
-                    var tableRawData = `<tr>
+                    const tableRawData = `<tr>
                                 <th scope="row">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="chk_child" value="${raw.id}">
                                     </div>
                                 </th>
                                 <td class="id"  style="display: none;">`+raw.id+`</td>
-                                <td class="name">`+raw.name+`</td>
+                                <td class="name">#STK`+raw.id+`</td>
                                 <td class="category_name">`+raw.category_name+`</td>
-                                <td class="brand_name">` + raw.brand_name + `</td>
                                 <td class="model_name">`+raw.model_name+`</td>
                                 <td class="mac_address">`+raw.mac_address+`</td>
                                 <td class="serial_num">`+raw.serial_num+`</td>
@@ -224,6 +222,20 @@ function initTable() {
     
 }
 
+$('#search-status').change(function() {
+    const searchstatus = $(this).val();
+    StockList.filter(function(data) {
+        const matchData = new DOMParser().parseFromString(
+            data.values().status,
+            "text/html"
+        );
+        const status = matchData.body.firstElementChild.innerHTML;
+        if (searchstatus !== '' && searchstatus !== status) return false;
+        return true;
+
+    });
+    StockList.update();
+})
 function SearchData() {
     const searchname = $('#search-name').val();
     const searchmodel = $('#search-model').val();
@@ -281,52 +293,70 @@ document.querySelector(".pagination-prev").addEventListener("click", function() 
         document.querySelector(".pagination.listjs-pagination").querySelector(".active").previousSibling.children[0].click() : "" : "";
 });
 
-
+let deleteIds = [];
 function DeleteStock(data, multi = false) {
-    const ids = multi?data:[data.getAttribute('data-id')];
-    if (confirm('Are you sure you want to delete this?')) {
-      $.ajax({
-        type: "post",
-        url: api.url + "inventory/delete-stock",
-        data: {ids:ids},
-        headers: {
-            Authorization: localStorage.getItem("token"),
-        },
-        success: function(response) {
-          if (response.success) {
-            if (response.success) {
-                Swal.fire({
-                    title: 'Success!',
-                    text: response.message,
-                    icon: 'success',
-                    confirmButtonText: 'O K'
-                })
-
-                ids.forEach(function(id) {
-                    StockList.remove("id", id);
-                });
-                document.getElementById('checkAll').checked = false;
-                UpdateStockList(true);
-            }
-          }
-        },
-        error: function(error) {
-            // error.status == 0 && (window.location.href = "/login");
-            // error.status == 404 && (window.location.href = "/auth-404-basic");
-        }
-      })
-    } else {
-      return false;
-    }
+    deleteIds = multi?data:[data.getAttribute('data-id')];
+    $('#deleteStock').modal('show');
 }
+$('#delete-stock-btn').click(function() {
+    if (deleteIds.length > 0) {
+        $.ajax({
+            type: "post",
+            url: api.url + "inventory/delete-stock",
+            data: {ids:deleteIds},
+            headers: {
+                Authorization: localStorage.getItem("token"),
+            },
+            success: function(response) {
+              if (response.success) {
+                $('#deleteStock').modal('hide');
+                if (response.success) {
+
+                    Swal.fire({
+                        title: 'Success!',
+                        text: response.message,
+                        icon: 'success',
+                        confirmButtonText: 'O K'
+                    })
+
+                    deleteIds.forEach(function(id) {
+                        StockList.remove("id", id);
+                    });
+                    deleteIds = [];
+                    document.getElementById('checkAll').checked = false;
+                    UpdateStockList(true);
+                } else {
+                    Swal.fire({
+                        title: 'Failure!',
+                        text: 'Failure the delete stock',
+                        icon: 'error',
+                        confirmButtonText: 'O K'
+                    })
+                }
+              }
+            },
+            error: function(error) {
+                // error.status == 0 && (window.location.href = "/login");
+                // error.status == 404 && (window.location.href = "/auth-404-basic");
+            }
+        })
+    }
+})
+
+$('#new-stock-category').change(function() {
+    $(`#new-stock-model>option:not(.category-${$(this).val()})`).css('display', 'none');
+    $(`#new-stock-model .category-${$(this).val()}`).css('display', 'block');
+    $('#new-stock-model').val('');
+})
+
 function EditStock(data) {
+    $('#new-stock-form')[0].classList.remove('was-validated');
     const id = data.getAttribute('data-id');
     const editData = Categories.filter((obj)=>obj.id==id);
-    console.log(editData)
     $('#new-stock-id').val(id);
     $('#new-stock-category').val(editData[0]['category']);
-    $('#new-stock-name').val(editData[0]['name']);
-    $('#new-stock-brand').val(editData[0]['brand']);
+    // $('#new-stock-name').val(editData[0]['name']);
+    // $('#new-stock-brand').val(editData[0]['brand']);
     $('#new-stock-model').val(editData[0]['model_id']);
     $('#new-stock-mac').val(editData[0]['mac_address']);
     $('#new-stock-serial').val(editData[0]['serial_num']);
@@ -334,14 +364,18 @@ function EditStock(data) {
     $('#new-stock-wlan1').val(editData[0]['wlan1']);
     $('#new-stock-configure').val(editData[0]['configure']);
     $('#new-stock-status').val(editData[0]['status']);
+
+    $('#modal-title').html('Update Stock');
+    $('#new-stock-save').html('Update');
     $("#new-stock-modal").modal('show');
 }
 
 function newStock() {
+    $('#new-stock-form')[0].classList.remove('was-validated');
   $('#new-stock-id').val('');
-  $('#new-stock-name').val('');
+  // $('#new-stock-name').val('');
   $('#new-stock-category').val('');
-  $('#new-stock-brand').val('');
+  // $('#new-stock-brand').val('');
   $('#new-stock-model').val('');
   $('#new-stock-mac').val('');
   $('#new-stock-serial').val('');
@@ -349,6 +383,8 @@ function newStock() {
   $('#new-stock-wlan1').val('');
   $('#new-stock-configure').val('1');
   $('#new-stock-status').val('1');
+    $('#modal-title').html('New Stock');
+    $('#new-stock-save').html('Add');
   $("#new-stock-modal").modal('show');
 }
 $('#new-stock-close').click(function(event) {
@@ -369,8 +405,8 @@ $('#new-stock-save').click(function(event) {
           data: {
             id: $('#new-stock-id').val(),
             category: $('#new-stock-category').val(),
-            name: $('#new-stock-name').val(),
-            brand: $('#new-stock-brand').val(),
+            // name: $('#new-stock-name').val(),
+            // brand: $('#new-stock-brand').val(),
             model_id: $('#new-stock-model').val(),
             mac_address: $('#new-stock-mac').val(),
             serial: $('#new-stock-serial').val(),
@@ -400,6 +436,7 @@ $('#new-stock-save').click(function(event) {
           }
     })
 })
+const mac_mask = "1234567890ABCDEFabcdef";
 new Cleave('.mac-mask1', {
     delimiter: ':',
     blocks: [2,2,2,2,2,2],
@@ -415,6 +452,12 @@ new Cleave('.mac-mask3', {
     blocks: [2,2,2,2,2,2],
     uppercase: true
 });
+$('.mac-mask').keydown(function(e) {
+    if (e.keyCode > 47 && mac_mask.indexOf(e.key) === -1) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+})
 // Delete Multiple Records
 function deleteMultiple() {
     ids_array = [];

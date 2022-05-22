@@ -24,24 +24,25 @@
                         <div class="row g-3">
                             <div class="col-xxl-3 col-sm-4">
                                 <div class="search-box">
-                                    <input type="text" class="form-control bg-light border-light" id="search-name"
+                                    <input type="text" class="form-control search bg-light border-light" id="search-name"
                                         placeholder="Search for name...">
                                     <i class="ri-search-line search-icon"></i>
                                 </div>
                             </div>
                             <!--end col-->
-                            <div class="col-xxl-3 col-sm-3">
+                           <!--  <div class="col-xxl-3 col-sm-3">
                                 <div class="search-box">
                                     <input type="test" class="form-control  bg-light border-light" id="search-model" 
                                         placeholder="Search for model...">
                                     <i class="ri-search-line search-icon"></i>
                                 </div>
-                            </div>
+                            </div> -->
+                           <div class="col-xxl-4 col-sm-5"></div>
                             <!--end col-->
                             <div class="col-xxl-3 col-sm-3">
                                 <div class="input-light">
                                     <select class="form-control" name="choices-single-default"  id="search-status">
-                                        <option value="" selected>Status</option>
+                                        <option value="" selected>All</option>
                                         <option value="Active">Active</option>
                                         <option value="Blocked">Blocked</option>
                                         <option value="Broken">Broken</option>
@@ -51,11 +52,11 @@
                             </div>
                             <!--end col-->
 
-                            <div class="col-xxl-1 col-sm-2">
+                           <!--  <div class="col-xxl-1 col-sm-2">
                                 <button type="button" class="btn btn-primary w-100" onclick="SearchData();">
                                     <i class="ri-equalizer-fill me-1 align-bottom"></i> Filters
                                 </button>
-                            </div>
+                            </div> -->
                             <!--end col-->
                         </div>
                         <!--end row-->
@@ -63,7 +64,7 @@
                 </div>
                 <div class="card-body">
                     <div>
-                        <div class="table-responsive table-card">
+                        <div class="table-responsive table-card" style="min-height:38vh;">
                             <table class="table align-middle table-nowrap" id="CategoryTable">
                                 <thead class="text-muted">
                                     <tr>
@@ -72,9 +73,9 @@
                                                 <input class="form-check-input" type="checkbox" id="checkAll" value="option">
                                             </div>
                                         </th>
-                                        <th class="sort text-uppercase" data-sort="name">Name</th>
+                                        <th class="sort text-uppercase" data-sort="name">Stock ID</th>
                                         <th class="sort text-uppercase" data-sort="brand_name"> Category</th>
-                                        <th class="sort text-uppercase" data-sort="brand_name"> Brand</th>
+                                        <!-- <th class="sort text-uppercase" data-sort="brand_name"> Brand</th> -->
                                         <th class="sort text-uppercase" data-sort="model_name">Model</th>
                                         <th class="sort text-uppercase" data-sort="mac_address">MAC</th>
                                         <th class="sort text-uppercase" data-sort="serial_num">Serial Number</th>
@@ -87,7 +88,9 @@
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all" id="category-list-data">
-
+                                    <tr>
+                                        <td colspan="12" style="text-align: center;"><span class="spinner-border flex-shrink-0" role="status"></span></td>
+                                    </tr>
                                 </tbody>
                             </table>
                             <div class="noresult" style="display: none">
@@ -97,7 +100,7 @@
                                     </lord-icon>
                                     <h5 class="mt-2">Sorry! No Result Found</h5>
                                     <p class="text-muted mb-0">We did not find any
-                                        invoices for you search.</p>
+                                        stock for you search.</p>
                                 </div>
                             </div>
                         </div>
@@ -115,7 +118,7 @@
                     </div>
 
                     <!-- Modal -->
-                    <div class="modal fade flip" id="deleteOrder" tabindex="-1" aria-labelledby="deleteOrderLabel"
+                    <div class="modal fade flip" id="deleteStock" tabindex="-1" aria-labelledby="deleteOrderLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -124,12 +127,12 @@
                                         colors="primary:#25a0e2,secondary:#00bd9d" style="width:90px;height:90px">
                                     </lord-icon>
                                     <div class="mt-4 text-center">
-                                        <h4>You are about to delete a invoice ?</h4>
-                                        <p class="text-muted fs-15 mb-4">Deleting your invoice will remove all of
+                                        <h4>You are about to delete a stock ?</h4>
+                                        <p class="text-muted fs-15 mb-4">Deleting your stock will remove all of
                                             your information from our database.</p>
                                         <div class="hstack gap-2 justify-content-center remove">
                                             <button class="btn btn-link link-primary fw-medium text-decoration-none" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</button>
-                                            <button class="btn btn-primary" id="delete-record">Yes, Delete It</button>
+                                            <button class="btn btn-primary" id="delete-stock-btn">Yes, Delete It</button>
                                         </div>
                                     </div>
                                 </div>
@@ -155,62 +158,62 @@
                     <div class="row event-form">
 
                         <input type="text" name="id" id="new-stock-id" style="display: none;">
-                        <div class="col-12"> 
+                        <!-- <div class="col-12"> 
                             <div class="mb-3">
                                 <label class="form-label">Name</label>
                                 <input class="form-control" placeholder="Enter Name..." type="text" name="name" id="new-stock-name" required />
                                 <div class="invalid-feedback">Please enter name</div>
                             </div>
-                        </div><!--end col-->
-                        <div class="col-12"> 
+                        </div> --><!--end col-->
+                        <div class="col-6"> 
                             <div class="mb-3">
                                 <label class="form-label">Category</label>
                                 <select class="form-control" name="choices-single-default" id="new-stock-category" required>
                                 </select>
                             </div>
                         </div><!--end col-->
-                        <div class="col-12"> 
+                        <!-- <div class="col-6"> 
                             <div class="mb-3">
                                 <label class="form-label">Brand</label>
                                 <select class="form-control" name="choices-single-default" id="new-stock-brand" required>
                                 </select>
                             </div>
-                        </div><!--end col-->
-                        <div class="col-12"> 
+                        </div> --><!--end col-->
+                        <div class="col-6"> 
                             <div class="mb-3">
-                                <label class="form-label">Model</label>
+                                <label class="form-label">Item</label>
                                 <select class="form-control" name="choices-single-default" id="new-stock-model" required>
                                 </select>
                             </div>
                         </div><!--end col-->
-                        <div class="col-12"> 
+                        <div class="col-6"> 
                             <div class="mb-3">
                                 <label class="form-label">MAC</label>
-                                <input class="form-control mac-mask1" placeholder="Enter MAC..." type="text" name="mac" id="new-stock-mac" required />
+                                <input class="form-control mac-mask1 mac-mask" placeholder="Enter MAC..." type="text" name="mac" id="new-stock-mac" required />
                                 <div class="invalid-feedback">Please provide a valid MAC</div>
                             </div>
                         </div><!--end col-->
-                        <div class="col-12"> 
+                        <div class="col-6"> 
                             <div class="mb-3">
                                 <label class="form-label">Serial No</label>
                                 <input class="form-control" placeholder="Enter MAC..." type="number" name="serial_num" id="new-stock-serial" required />
                             </div>
                         </div><!--end col-->
-                        <div class="col-12"> 
+                        <div class="col-6"> 
                             <div class="mb-3">
                                 <label class="form-label">WLAN0 MAC</label>
-                                <input class="form-control mac-mask2" placeholder="Enter MAC..." type="text" name="wlan0_mac" id="new-stock-wlan0" required />
+                                <input class="form-control mac-mask2 mac-mask" placeholder="Enter MAC..." type="text" name="wlan0_mac" id="new-stock-wlan0" required />
                                 <div class="invalid-feedback">Please provide a valid MAC...</div>
                             </div>
                         </div><!--end col-->
-                        <div class="col-12"> 
+                        <div class="col-6"> 
                             <div class="mb-3">
                                 <label class="form-label">WLAN1 MAC</label>
-                                <input class="form-control mac-mask3" placeholder="Enter MAC..." type="text" name="wlan1_mac" id="new-stock-wlan1" required />
+                                <input class="form-control mac-mask3 mac-mask" placeholder="Enter MAC..." type="text" name="wlan1_mac" id="new-stock-wlan1" required />
                                 <div class="invalid-feedback">Please provide a valid MAC...</div>
                             </div>
                         </div><!--end col-->
-                        <div class="col-12"> 
+                        <div class="col-6"> 
                             <div class="mb-3">
                                 <label class="form-label">IS CONFIGURED</label>
                                 <select class="form-control" name="configure" id="new-stock-configure">
@@ -219,7 +222,7 @@
                                 </select>
                             </div>
                         </div><!--end col-->
-                        <div class="col-12"> 
+                        <div class="col-6"> 
                             <div class="mb-3">
                                 <label class="form-label">Device Status</label>
                                 <select class="form-control" name="status" id="new-stock-status" required >
